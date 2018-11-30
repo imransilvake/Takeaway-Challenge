@@ -15,9 +15,9 @@ React seed is based on create-react-app and it incorporates many best practices 
 - [X] [SCSS Framework](https://github.com/imransilvake/SCSS-Framework)
 
 #### External 
-- [X] [Angular CLI](https://cli.angular.io/)
-- [X] [Angular Material](https://material.angular.io/)
-- [X] [Translation](https://github.com/ngx-translate/core)
+- [X] [Create React App](https://github.com/facebook/create-react-app)
+- [X] [Translation](https://github.com/i18next/react-i18next)
+- [X] [Redux](https://redux.js.org/)
 
 
 ## Commands
@@ -63,3 +63,8 @@ npm run es
 ```
 npm run lint:scss
 ```
+
+## Extra
+- Listen to port: `localhost:3000`
+- Kill port: 4200: `sudo lsof -t -i tcp:3000 | xargs kill -9`
+- Search and remove file recursively: `find . -name "*.DS_Store" -delete`
