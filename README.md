@@ -3,7 +3,9 @@ React seed is based on create-react-app and it incorporates many best practices 
 
 ## Content
 - [X] SCSS Inclusion
-- [X] Lint: `scss, js`
 - [X] Translation (i18n)
-- [ ] Build Environments: `dev, stag, next, prod`
 - [X] Redux
+
+#### Development Specific
+- [X] Build Environments: `dev, stag, next, prod`
+- [X] Linting: `scss, js`
