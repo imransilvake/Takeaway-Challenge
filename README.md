@@ -51,7 +51,7 @@ build: yarn build.app.prod
 ## Linting
 ###### JSX
 ```
-npm run es
+npm run lint:es
 ```
 
 ###### SCSS
