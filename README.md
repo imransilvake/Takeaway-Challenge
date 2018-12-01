@@ -20,13 +20,12 @@ React seed is based on create-react-app and it incorporates many best practices 
 - [X] [Redux](https://redux.js.org/)
 
 
-## Commands
+## Environments
 In order to serve the build folder, run the following command first:
 ```
 yarn global add serve
 ```
 
-#### Environments: Serve & Build
 ###### Local
 ```
 build: yarn build
