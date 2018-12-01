@@ -40,11 +40,6 @@ serve: yarn serve.app.stag
 build: yarn build.app.stag
 ```
 
-###### Next
-```
-serve: yarn serve.app.next
-build: yarn build.app.next
-```
 
 ###### Production
 ```
