@@ -21,7 +21,7 @@ React seed is based on create-react-app and it incorporates many best practices 
 
 
 ## Commands
-In order to serve the build folder, run the command:
+In order to serve the build folder, run the following command first:
 ```
 yarn global add serve
 ```
