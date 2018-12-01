@@ -23,28 +23,27 @@ React seed is based on create-react-app and it incorporates many best practices 
 ## Commands
 #### Update & Install
 ```
-update: npm update
-install: npm install
+update: yarn update
+install: yarn install
 ```
 
 #### Environments: Serve & Build
 ###### Local
 ```
-serve: yarn start
 build: yarn build
+serve: yarn start
 ```
 
 ###### Staging
 ```
-serve: yarn serve.app.stag
-build: yarn build.app.stag
+build: yarn build:staging
+serve: yarn serve
 ```
-
 
 ###### Production
 ```
-serve: yarn serve.app.prod
-build: yarn build.app.prod
+build: yarn build:production
+serve: yarn serve
 ```
 
 
