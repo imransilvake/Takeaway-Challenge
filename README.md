@@ -26,9 +26,9 @@ In order to serve the build folder, run the following command first:
 yarn global add serve
 ```
 
-#### Local
+#### Development
 ```
-build: yarn build
+build: yarn build:development
 serve: yarn start
 ```
 
