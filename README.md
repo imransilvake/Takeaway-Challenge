@@ -17,6 +17,7 @@ React seed is based on create-react-app and it incorporates many best practices 
 #### External 
 - [X] [Create React App](https://github.com/facebook/create-react-app)
 - [X] [Redux](https://redux.js.org/)
+- [X] [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 - [X] [Translation](https://github.com/i18next/react-i18next)
 
 
