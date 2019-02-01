@@ -12,7 +12,7 @@ class AppRouter extends Component {
 		return (
 			<Switch>
 				<Route exact path={ENV.ROUTING.HOME} component={Home}/>
-				<Route exact from="*" component={Component404}/>
+				<Route from="*" component={Component404}/>
 			</Switch>
 		);
 	}

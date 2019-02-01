@@ -9,6 +9,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 // app
 import AppRouter from './AppRouter';
+import Header from "./system/frame/header/Header";
+import Footer from "./system/frame/footer/Footer";
 
 // redux store
 const store = createStore(() => {}, composeWithDevTools());
@@ -19,12 +21,16 @@ class App extends Component {
 			<Provider store={store}>
 				<BrowserRouter>
 					<React.Fragment>
-						{/* Header */}
+						<section className="tc-app">
+							{/* Header */}
+							<Header/>
 
-						{/* Router */}
-						<AppRouter/>
+							{/* Router */}
+							<AppRouter/>
 
-						{/* Footer */}
+							{/* Footer */}
+							<Footer/>
+						</section>
 					</React.Fragment>
 				</BrowserRouter>
 			</Provider>

@@ -1,4 +1,4 @@
-# React Seed
+# Takeaway Challenge
 React seed is based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
 
 
@@ -21,31 +21,6 @@ React seed is based on create-react-app and it incorporates many best practices 
 - [X] [Translation](https://github.com/i18next/react-i18next)
 
 
-## Environments
-In order to serve the build folder, run the following command first:
-```
-yarn global add serve
-```
-
-#### Development
-```
-build: yarn build:development
-serve: yarn start
-```
-
-#### Staging
-```
-build: yarn build:staging
-serve: yarn serve
-```
-
-#### Production
-```
-build: yarn build:production
-serve: yarn serve
-```
-
-
 ## Linting
 #### JSX
 ```
@@ -56,9 +31,3 @@ yarn lint:es
 ```
 yarn lint:scss
 ```
-
-
-## Extra
-- Listen to port: `localhost:3000`
-- Kill port: 4200: `sudo lsof -t -i tcp:3000 | xargs kill -9`
-- Search and remove file recursively: `find . -name "*.DS_Store" -delete`
