@@ -19,6 +19,9 @@ React seed is based on create-react-app and it incorporates many best practices 
 - [X] [Redux](https://redux.js.org/)
 - [X] [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 - [X] [Translation](https://github.com/i18next/react-i18next)
+- [X] [Firebase](https://firebase.google.com/)
+- [X] [Material-UI](https://material-ui.com/)
+- [X] [Classnames](https://github.com/JedWatson/classnames)
 
 
 ## Linting
