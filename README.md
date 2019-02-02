@@ -1,7 +1,9 @@
 # Takeaway Challenge
 This game application is using React-Seed that is based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
 
-<img src="preview.png" width="40%">
+<p align="center">
+<img src="preview.png" width="60%">
+</p>
 
 
 ## Content
