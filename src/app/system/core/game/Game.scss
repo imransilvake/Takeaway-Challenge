@@ -1,0 +1,90 @@
+.tc-game {
+	.tc-alert {
+		p {
+			padding: 10px 15px;
+			background-color: cd-palette($cd-background, 2013);
+			color: cd-palette($cd-color, 1006);
+			font-size: 13px;
+		}
+	}
+
+	.tc-moves {
+		padding: 15px 15px 90px;
+
+		.tc-user {
+			display: flex;
+
+			.tc-avatar {
+				background-color: cd-palette($cd-background, 2012);
+				border-radius: 50%;
+				float: left;
+				height: 35px;
+				padding: 1px;
+				vertical-align: top;
+				width: 35px;
+			}
+
+			.tc-desc {
+				display: inline-block;
+				margin-left: 10px;
+				width: calc(100% - 45px - 45px);
+
+				p {
+					background-color: cd-palette($cd-background, 2013);
+					border: 1px solid cd-palette($cd-border, 3004);
+					box-shadow: 1px 1px cd-palette($cd-shadow, 4002);
+					font-family: initial;
+					padding: 3px 10px;
+
+					&:nth-of-type(2) {
+						margin-top: 3px;
+					}
+				}
+			}
+
+			&:not(:last-child) {
+				margin-bottom: 20px;
+			}
+
+			&.tc-opponent {
+				direction: rtl;
+
+				.tc-desc {
+					direction: ltr;
+					margin-left: 0;
+					margin-right: 10px;
+					text-align: right;
+				}
+			}
+		}
+	}
+
+	.tc-buttons {
+		background-color: cd-palette($cd-background, 2001);
+		border-top: 1px solid cd-palette($cd-border, 3004);
+		bottom: 35px;
+		box-shadow: 0 -1px 4px 0 cd-palette($cd-shadow, 4002, .3);
+		left: 0;
+		padding-bottom: 15px;
+		padding-top: 15px;
+		position: absolute;
+		right: 0;
+		text-align: center;
+
+		button {
+			background-color: cd-palette($cd-background, 2012);
+			border-radius: 50%;
+			color: cd-palette($cd-color, 1001);
+			margin: 0 10px;
+			min-height: 40px;
+			min-width: 40px;
+			padding: 0;
+			width: 40px;
+
+			&:disabled {
+				opacity: .5;
+				pointer-events: none;
+			}
+		}
+	}
+}

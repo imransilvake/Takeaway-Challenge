@@ -9,6 +9,10 @@ import Home from './system/frame/home/Home';
 import Game from "./system/core/game/Game";
 
 class AppRouter extends Component {
+	componentWillMount() {
+		console.log(this.props.location);
+	}
+
 	render() {
 		return (
 			<Switch>
