@@ -8,6 +8,7 @@ import { reactI18nextModule } from 'react-i18next';
 // app
 import translationEN from './locales/en';
 import translationDE from './locales/de';
+import { localStorageGet } from '../../app/system/utilities/helpers/Storage';
 
 // add translations
 const resources = {
@@ -15,13 +16,16 @@ const resources = {
 	de: { translation: translationDE }
 };
 
+// get saved language from local storage
+const getSavedLanguage = localStorageGet('TC_LANGUAGE', 'PERSISTENT');
+
 // init i18n
 i18n
 	.use(detector)
 	.use(reactI18nextModule) // passes i18n down to react-i18next
 	.init({
 		resources,
-		lng: 'en',
+		lng: getSavedLanguage || 'en',
 		interpolation: { escapeValue: false } // react already safes from xss
 	})
 	.then();

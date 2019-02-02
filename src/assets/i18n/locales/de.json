@@ -1,4 +1,11 @@
 {
-	"WELCOME": "Willkommen",
-	"404": "404 Fehler"
+	"404": "404 Fehler",
+	"HOME": {
+		"TITLE": "Takeaway Herausforderung",
+		"SUBTITLE": "Wähle deinen Gegner!",
+		"BUTTONS": {
+			"CPU": "CPU",
+			"REAL": "Echter Spieler"
+		}
+	}
 }

@@ -1,0 +1,14 @@
+.tc-footer {
+	align-items: center;
+	background-color: cd-palette($cd-background, 2012);
+	border-top: 1px solid cd-palette($cd-border, 3006);
+	box-shadow: 1px 0 1px cd-palette($cd-shadow, 4002);
+	padding: 5px 8px;
+
+	h6 {
+		align-items: center;
+		color: cd-palette($cd-color, 1001);
+		display: flex;
+		justify-content: center;
+	}
+}

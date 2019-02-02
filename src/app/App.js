@@ -9,8 +9,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 // app
 import AppRouter from './AppRouter';
-import Header from "./system/frame/header/Header";
-import Footer from "./system/frame/footer/Footer";
+import Header from './system/frame/header/Header';
+import Footer from './system/frame/footer/Footer';
+import { withNamespaces } from 'react-i18next';
 
 // redux store
 const store = createStore(() => {}, composeWithDevTools());
@@ -38,4 +39,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default withNamespaces()(App);

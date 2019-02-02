@@ -1,0 +1,24 @@
+.tc-home {
+	background-color: cd-palette($cd-background, 2012);
+	position: relative;
+
+	h4 {
+		font-weight: cd-fontWeight(700);
+	}
+
+	.tc-center {
+		width: 100%;
+
+		.tc-buttons {
+			margin-top: 20px;
+
+			button {
+				background-color: cd-palette($cd-background, 2001);
+
+				&:first-child {
+					margin-right: 5px;
+				}
+			}
+		}
+	}
+}

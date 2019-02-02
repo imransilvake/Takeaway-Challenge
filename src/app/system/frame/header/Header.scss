@@ -1,8 +1,43 @@
 .tc-header {
 	.cd-row {
 		align-items: center;
-		border-bottom: 1px solid cd-palette($cd-border, 3005);
+		background-color: cd-palette($cd-background, 2012);
+		border-bottom: 1px solid cd-palette($cd-border, 3006);
 		box-shadow: 1px 0 1px cd-palette($cd-shadow, 4002);
-		padding: 5px;
+		padding: 8px 0;
+
+		.cd-col {
+			&.tc-logo {
+				padding-right: 5px;
+
+				img {
+					display: block;
+					width: 130px;
+				}
+			}
+
+			&.tc-language {
+				padding-left: 5px;
+
+				button {
+					background-color: transparent;
+					border: 0;
+					color: cd-palette($cd-color, 1001);
+					cursor: pointer;
+					font-size: cd-fontSize(s15);
+					outline: 0;
+					padding: 0;
+					text-decoration: none;
+
+					&:hover {
+						opacity: .9;
+					}
+				}
+
+				span {
+					color: cd-palette($cd-color, 1001);
+				}
+			}
+		}
 	}
 }
