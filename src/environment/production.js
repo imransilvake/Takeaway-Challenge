@@ -1,6 +1,7 @@
 const production = {
 	ROUTING: {
-		HOME: '/'
+		HOME: '/',
+		GAME: '/game'
 	}
 };
 

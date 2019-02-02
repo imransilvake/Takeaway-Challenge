@@ -1,6 +1,7 @@
 const staging = {
 	ROUTING: {
-		HOME: '/'
+		HOME: '/',
+		GAME: '/game'
 	}
 };
 

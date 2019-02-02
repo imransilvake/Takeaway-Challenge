@@ -1,9 +1,11 @@
 // react
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 // app
 import Button from '@material-ui/core/Button';
 import i18n from '../../../../assets/i18n/i18n';
+import ENV from '../../../../environment/index';
 
 class Home extends Component {
 	render() {
@@ -13,8 +15,10 @@ class Home extends Component {
 					<h4>{i18n.t('HOME.TITLE')}</h4>
 					<p>{i18n.t('HOME.SUBTITLE')}</p>
 					<div className="tc-buttons">
-						<Button>{i18n.t('HOME.BUTTONS.CPU')}</Button>
-						<Button>{i18n.t('HOME.BUTTONS.REAL')}</Button>
+						<Link to={ENV.ROUTING.GAME}>
+							<Button>{i18n.t('HOME.BUTTONS.CPU')}</Button>
+							<Button>{i18n.t('HOME.BUTTONS.REAL')}</Button>
+						</Link>
 					</div>
 				</div>
 			</section>

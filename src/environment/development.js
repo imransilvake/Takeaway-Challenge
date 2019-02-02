@@ -1,6 +1,7 @@
 const development = {
 	ROUTING: {
-		HOME: '/'
+		HOME: '/',
+		GAME: '/game'
 	}
 };
 
