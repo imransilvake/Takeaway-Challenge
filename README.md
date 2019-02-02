@@ -27,13 +27,5 @@ This game application is using React-Seed that is based on create-react-app and 
 - [X] [Classnames](https://github.com/JedWatson/classnames)
 
 
-## Linting
-#### JSX
-```
-yarn lint:es
-```
-
-#### SCSS
-```
-yarn lint:scss
-```
+## Information
+Check [React-Seed](https://github.com/imransilvake/React-Seed) to understand how to build and serve this project as well as how to use SCSS and JS linting.
