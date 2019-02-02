@@ -3,7 +3,12 @@
 	position: relative;
 
 	h4 {
+		color: cd-palette($cd-color, 1001);
 		font-weight: cd-fontWeight(700);
+	}
+
+	p {
+		color: cd-palette($cd-color, 1001);
 	}
 
 	.tc-center {
@@ -22,6 +27,24 @@
 					margin-right: 5px;
 				}
 			}
+		}
+	}
+
+	.tc-additional {
+		bottom: 10px;
+		left: 0;
+		padding: 0 10px;
+		position: absolute;
+		right: 0;
+		text-align: center;
+
+		p {
+			font-style: italic;
+		}
+
+		* {
+			color: cd-palette($cd-color, 1001);
+			font-size: cd-fontSize(s12);
 		}
 	}
 }

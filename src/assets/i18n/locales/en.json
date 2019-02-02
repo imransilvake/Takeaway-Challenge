@@ -6,6 +6,20 @@
 		"BUTTONS": {
 			"CPU": "CPU",
 			"REAL": "Real Player"
+		},
+		"RESULT": {
+			"WINNER": {
+				"TITLE": "You Win!",
+				"SUBTITLE": "Congratulations ;)"
+			},
+			"LOSER": {
+				"TITLE": "You Lost!",
+				"SUBTITLE": "Better Luck Next Time :("
+			}
+		},
+		"ADDITION": {
+			"TITLE": "Goto Home",
+			"NOTE": "Tip: Get 1 at the end to win the game."
 		}
 	},
 	"GAME": {

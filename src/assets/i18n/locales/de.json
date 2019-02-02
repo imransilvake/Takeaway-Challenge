@@ -6,6 +6,20 @@
 		"BUTTONS": {
 			"CPU": "CPU",
 			"REAL": "Echter Spieler"
+		},
+		"RESULT": {
+			"WINNER": {
+				"TITLE": "Du gewinnst!",
+				"SUBTITLE": "Herzliche Glückwünsche ;)"
+			},
+			"LOSER": {
+				"TITLE": "Du hast verloren!",
+				"SUBTITLE": "Besseres Glück beim nächsten Mal :("
+			}
+		},
+		"ADDITION": {
+			"TITLE": "Zur Startseite",
+			"NOTE": "Spitze: Holen Sie sich 1 am Ende, um das Spiel zu gewinnen."
 		}
 	},
 	"GAME": {

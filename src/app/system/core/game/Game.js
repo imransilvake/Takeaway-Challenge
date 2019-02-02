@@ -11,6 +11,7 @@ import PlayerImage from '../../../../assets/images/player-dp.png';
 import CPUImage from '../../../../assets/images/cpu-dp.png';
 import i18n from '../../../../assets/i18n/i18n';
 import { updateGame } from '../../../store/actions/GameAction';
+import ENV from '../../../../environment';
 
 class Game extends Component {
 	state = {
@@ -53,8 +54,12 @@ class Game extends Component {
 							<div key={i} className={!item.userTurn ? 'tc-user' : 'tc-user tc-opponent'}>
 								<img className="tc-avatar" src={!item.userTurn ? PlayerImage : CPUImage} alt="cpu"/>
 								<div className="tc-desc">
-									{ item.action && (<h5>{item.action}</h5>) }
-									{ item.action && (<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>) }
+									{item.action && (<h5>{item.action}</h5>)}
+									{
+										item.action && (
+											<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>
+										)
+									}
 									<p ref={history.length - 1 === i ? this.myRef : null}>{item.number}</p>
 								</div>
 							</div>
@@ -193,9 +198,20 @@ class Game extends Component {
 				inline: 'center'
 			});
 
-			// if number reaches 1
+			// if number reaches 1, we need to finish the game and declare the winner.
 			if (value === 1) {
-				this.setState({ finalOutcome: true });
+				this.setState({ finalOutcome: true }, () => {
+					// timeout added to delay the route and show the final move on the screen.
+					// usually I don't recommend using setTimeout in a project.
+					setTimeout(() => {
+						this.props.history.push({
+							pathname: ENV.ROUTING.HOME,
+							state: {
+								result: userTurn
+							}
+						})
+					}, 1000);
+				});
 			}
 		});
 	};
