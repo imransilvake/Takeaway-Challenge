@@ -48,7 +48,7 @@ class Game extends Component {
 			<section className="tc-game tc-view-height">
 				{/* Notice */}
 				<div className="tc-alert">
-					<p>{i18n.t('GAME.ALERT', { type: userTurn ? 'Your' : 'CPU', time: 5 - timer })}</p>
+					<p>{i18n.t('GAME.ALERT', { type: userTurn ? 'Your' : 'CPU', time: 20 - timer })}</p>
 				</div>
 
 				{/* Moves */}
@@ -218,6 +218,7 @@ class Game extends Component {
 		const { gameRef, userTurn } = this.state;
 		const { gameState } = this.props;
 
+		// set state
 		this.setState({ finalOutcome: true }, () => {
 			// empty data from firebase
 			gameRef
@@ -233,7 +234,7 @@ class Game extends Component {
 					state: {
 						result: !userTurn
 					}
-				})
+				});
 			}, 1000);
 		});
 	};
@@ -250,7 +251,7 @@ class Game extends Component {
 			this.setState({ timer: seconds });
 
 			// validate user status
-			if (seconds === 5) {
+			if (seconds === 20) {
 				// clear interval
 				clearInterval(this.timer);
 

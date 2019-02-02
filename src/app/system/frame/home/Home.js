@@ -36,8 +36,8 @@ class Home extends Component {
 					</div>
 				</div>
 				<div className="tc-additional">
-					{!location.state && ( <p>{i18n.t('HOME.ADDITION.NOTE')}</p> )}
-					{location.state && ( <Link to={ENV.ROUTING.HOME}>{i18n.t('HOME.ADDITION.TITLE')}</Link> )}
+					{!location.state && (<p>{i18n.t('HOME.ADDITION.NOTE')}</p>)}
+					{location.state && (<Link to={ENV.ROUTING.HOME}>{i18n.t('HOME.ADDITION.TITLE')}</Link>)}
 				</div>
 			</section>
 		);
