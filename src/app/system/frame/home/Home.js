@@ -1,11 +1,13 @@
 // react
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 // app
 import Button from '@material-ui/core/Button';
 import i18n from '../../../../assets/i18n/i18n';
 import ENV from '../../../../environment/index';
+import { startGame } from '../../../store/actions/GameAction';
 
 class Home extends Component {
 	render() {
@@ -16,14 +18,22 @@ class Home extends Component {
 					<p>{i18n.t('HOME.SUBTITLE')}</p>
 					<div className="tc-buttons">
 						<Link to={ENV.ROUTING.GAME}>
-							<Button>{i18n.t('HOME.BUTTONS.CPU')}</Button>
-							<Button>{i18n.t('HOME.BUTTONS.REAL')}</Button>
+							<Button onClick={this.startGame('cpu')}>{i18n.t('HOME.BUTTONS.CPU')}</Button>
+							<Button onClick={this.startGame('player')}>{i18n.t('HOME.BUTTONS.REAL')}</Button>
 						</Link>
 					</div>
 				</div>
 			</section>
 		);
 	}
+
+	/**
+	 * start game
+	 */
+	startGame = type => () => {
+		// set redux state
+		this.props.startGame(type);
+	}
 }
 
-export default Home;
+export default connect(null, { startGame })(Home);

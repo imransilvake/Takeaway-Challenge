@@ -9,6 +9,6 @@
 		}
 	},
 	"GAME": {
-		"ALERT": "Spiele einen Zug innerhalb von 30 Sekunden, um im Spiel zu bleiben!"
+		"ALERT": "{{ type }} Zug endet in 30 Sekunden. Machen Sie einen Schritt, um im Spiel zu bleiben!"
 	}
 }

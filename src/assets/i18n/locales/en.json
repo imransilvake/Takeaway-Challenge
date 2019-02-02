@@ -9,6 +9,6 @@
 		}
 	},
 	"GAME": {
-		"ALERT": "Play a move within 30secs to remain in the game!"
+		"ALERT": "{{ type }} turn end in 30secs. Make a move to stay in the game!"
 	}
 }

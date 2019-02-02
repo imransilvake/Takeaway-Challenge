@@ -11,10 +11,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import AppRouter from './AppRouter';
 import Header from './system/frame/header/Header';
 import Footer from './system/frame/footer/Footer';
-import { withNamespaces } from 'react-i18next';
+import rootReducer from './store/reducers';
 
 // redux store
-const store = createStore(() => {}, composeWithDevTools());
+const store = createStore(rootReducer, composeWithDevTools());
 
 class App extends Component {
 	render() {
@@ -39,4 +39,4 @@ class App extends Component {
 	}
 }
 
-export default withNamespaces()(App);
+export default App;
