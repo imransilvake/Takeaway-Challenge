@@ -16,8 +16,8 @@ const resources = {
 	de: { translation: translationDE }
 };
 
-// get saved language from local storage
-const getSavedLanguage = localStorageGet('TC_LANGUAGE', 'PERSISTENT');
+// get current language from local storage
+const currentLanguage = localStorageGet('TC_LANGUAGE', 'PERSISTENT');
 
 // init i18n
 i18n
@@ -25,7 +25,7 @@ i18n
 	.use(reactI18nextModule) // passes i18n down to react-i18next
 	.init({
 		resources,
-		lng: getSavedLanguage || 'en',
+		lng: currentLanguage || 'en',
 		interpolation: { escapeValue: false } // react already safes from xss
 	})
 	.then();

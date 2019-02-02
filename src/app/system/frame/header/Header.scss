@@ -32,6 +32,12 @@
 					&:hover {
 						opacity: .9;
 					}
+
+					&.tc-active {
+						color: cd-palette($cd-color, 1012);
+						cursor: default;
+						pointer-events: none;
+					}
 				}
 
 				span {

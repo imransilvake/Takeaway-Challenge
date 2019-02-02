@@ -14,6 +14,9 @@
 
 			button {
 				background-color: cd-palette($cd-background, 2001);
+				border-radius: 3px;
+				box-shadow: 1px 1px 1px cd-palette($cd-shadow, 4005);
+				padding: 2px 8px;
 
 				&:first-child {
 					margin-right: 5px;
