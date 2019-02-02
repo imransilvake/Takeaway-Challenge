@@ -23,6 +23,6 @@
 		}
 	},
 	"GAME": {
-		"ALERT": "{{ type }} Zug endet in 30 Sekunden. Machen Sie einen Schritt, um im Spiel zu bleiben!"
+		"ALERT": "{{ type }} Zug endet in {{ time }} Sekunden. Machen Sie einen Schritt, um im Spiel zu bleiben!"
 	}
 }

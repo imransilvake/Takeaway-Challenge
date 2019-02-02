@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 import firebase from '../../../../firebase';
 
 // app
+import ENV from '../../../../environment';
+import i18n from '../../../../assets/i18n/i18n';
 import PlayerImage from '../../../../assets/images/player-dp.png';
 import CPUImage from '../../../../assets/images/cpu-dp.png';
-import i18n from '../../../../assets/i18n/i18n';
 import { updateGame } from '../../../store/actions/GameAction';
-import ENV from '../../../../environment';
 
 class Game extends Component {
 	state = {
@@ -19,7 +19,8 @@ class Game extends Component {
 		history: [],
 		userTurn: true,
 		allowedNumber: 0,
-		finalOutcome: false
+		finalOutcome: false,
+		timer: 0
 	};
 
 	componentDidMount() {
@@ -27,6 +28,9 @@ class Game extends Component {
 
 		// create element ref
 		this.myRef = React.createRef();
+
+		// start timer
+		this.startTimer();
 	}
 
 	componentWillUnmount() {
@@ -38,13 +42,13 @@ class Game extends Component {
 	}
 
 	render() {
-		const { history, userTurn, allowedNumber, finalOutcome } = this.state;
+		const { history, userTurn, allowedNumber, finalOutcome, timer } = this.state;
 
 		return (
 			<section className="tc-game tc-view-height">
 				{/* Notice */}
 				<div className="tc-alert">
-					<p>{i18n.t('GAME.ALERT', { type: userTurn ? 'Your' : 'CPU' })}</p>
+					<p>{i18n.t('GAME.ALERT', { type: userTurn ? 'Your' : 'CPU', time: 5 - timer })}</p>
 				</div>
 
 				{/* Moves */}
@@ -91,7 +95,7 @@ class Game extends Component {
 	 */
 	addGameListener = () => {
 		// init game
-		this.init();
+		this.initGame();
 
 		// add firebase real-time listener
 		this.addFirebaseRealTimeListener();
@@ -100,7 +104,7 @@ class Game extends Component {
 	/**
 	 * generate random whole number between 100 - 5000
 	 */
-	init = () => {
+	initGame = () => {
 		const randomNumber = Math.floor(Math.random() * 5000) + 100;
 		this.updateData(randomNumber);
 	};
@@ -182,6 +186,9 @@ class Game extends Component {
 			userTurn: !userTurn,
 			allowedNumber
 		}, () => {
+			// restart timer
+			this.restartTimer();
+
 			// store game state to redux
 			this.props.updateGame(value);
 
@@ -199,26 +206,69 @@ class Game extends Component {
 
 			// if number reaches 1, we need to finish the game and declare the winner.
 			if (value === 1) {
-				this.setState({ finalOutcome: true }, () => {
-					// empty data from firebase
-					gameRef
-						.child(gameState.type)
-						.update({ history: '' })
-						.then();
-
-					// timeout added to delay the route and show the final move on the screen.
-					// usually I don't recommend using setTimeout in a project.
-					setTimeout(() => {
-						this.props.history.push({
-							pathname: ENV.ROUTING.HOME,
-							state: {
-								result: userTurn
-							}
-						})
-					}, 1000);
-				});
+				this.endGame();
 			}
 		});
+	};
+
+	/**
+	 * end the game
+	 */
+	endGame = () => {
+		const { gameRef, userTurn } = this.state;
+		const { gameState } = this.props;
+
+		this.setState({ finalOutcome: true }, () => {
+			// empty data from firebase
+			gameRef
+				.child(gameState.type)
+				.update({ history: '' })
+				.then();
+
+			// timeout added to delay the route and show the final move on the screen.
+			// usually I don't recommend using setTimeout in a project.
+			setTimeout(() => {
+				this.props.history.push({
+					pathname: ENV.ROUTING.HOME,
+					state: {
+						result: !userTurn
+					}
+				})
+			}, 1000);
+		});
+	};
+
+	/**
+	 * start timer
+	 */
+	startTimer = () => {
+		const startTime = Date.now();
+		this.timer = setInterval(() => {
+			const seconds = Math.round((Date.now() - startTime) / 1000);
+
+			// set timer
+			this.setState({ timer: seconds });
+
+			// validate user status
+			if (seconds === 5) {
+				// clear interval
+				clearInterval(this.timer);
+
+				// end game
+				this.endGame();
+			}
+		}, 1000);
+	};
+
+	/**
+	 * restart timer
+	 */
+	restartTimer = () => {
+		// clear interval
+		clearInterval(this.timer);
+
+		// start timer
+		this.startTimer();
 	};
 }
 
