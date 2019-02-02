@@ -194,13 +194,18 @@ class Game extends Component {
 			// scroll element to end
 			this.myRef.current.scrollIntoView({
 				behavior: 'smooth',
-				block: 'center',
-				inline: 'center'
+				block: 'center'
 			});
 
 			// if number reaches 1, we need to finish the game and declare the winner.
 			if (value === 1) {
 				this.setState({ finalOutcome: true }, () => {
+					// empty data from firebase
+					gameRef
+						.child(gameState.type)
+						.update({ history: '' })
+						.then();
+
 					// timeout added to delay the route and show the final move on the screen.
 					// usually I don't recommend using setTimeout in a project.
 					setTimeout(() => {
