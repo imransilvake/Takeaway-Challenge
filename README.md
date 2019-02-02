@@ -1,9 +1,12 @@
 # Takeaway Challenge
-React seed is based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
+This game application is using React-Seed that is based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
 
 
 ## Content
 - [X] Firebase Database REST API
+- [X] Usage of Redux
+- [X] Usage of SCSS
+- [X] Added JSX and StyleLint 
 
 
 ## Libraries and Frameworks

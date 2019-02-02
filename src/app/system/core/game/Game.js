@@ -17,15 +17,27 @@ class Game extends Component {
 		gameRef: firebase.database().ref('game'),
 		history: [],
 		userTurn: true,
-		allowedNumber: 0
+		allowedNumber: 0,
+		finalOutcome: false
 	};
+
+	componentWillUnmount() {
+		const { gameRef } = this.state;
+		const { gameState } = this.props;
+
+		// remove live listener
+		gameRef.child(gameState.type).off();
+	}
 
 	componentDidMount() {
 		this.addGameListener();
+
+		// create element ref
+		this.myRef = React.createRef();
 	}
 
 	render() {
-		const { history, userTurn, allowedNumber } = this.state;
+		const { history, userTurn, allowedNumber, finalOutcome } = this.state;
 
 		return (
 			<section className="tc-game tc-view-height">
@@ -43,7 +55,7 @@ class Game extends Component {
 								<div className="tc-desc">
 									{ item.action && (<h5>{item.action}</h5>) }
 									{ item.action && (<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>) }
-									<p>{item.number}</p>
+									<p ref={history.length - 1 === i ? this.myRef: null}>{item.number}</p>
 								</div>
 							</div>
 						))
@@ -52,9 +64,15 @@ class Game extends Component {
 
 				{/* Buttons */}
 				<div className="tc-buttons">
-					<Button disabled={!userTurn || allowedNumber !== '-1'} onClick={() => this.addNextMove('-1')}>-1</Button>
-					<Button disabled={!userTurn || allowedNumber !== '0'} onClick={() => this.addNextMove('0')}>0</Button>
-					<Button disabled={!userTurn || allowedNumber !== '+1'} onClick={() => this.addNextMove('+1')}>+1</Button>
+					<Button disabled={!userTurn || allowedNumber !== '-1' || finalOutcome}
+							onClick={() => this.addNextMove('-1')}>-1
+					</Button>
+					<Button disabled={!userTurn || allowedNumber !== '0' || finalOutcome}
+							onClick={() => this.addNextMove('0')}>0
+					</Button>
+					<Button disabled={!userTurn || allowedNumber !== '+1' || finalOutcome}
+							onClick={() => this.addNextMove('+1')}>+1
+					</Button>
 				</div>
 			</section>
 		);
@@ -64,19 +82,37 @@ class Game extends Component {
 	 * add game listener
 	 */
 	addGameListener = () => {
-		const { gameRef } = this.state;
-
 		// init game
 		this.init();
 
 		// add firebase real-time listener
+		this.addFirebaseRealTimeListener();
+	};
+
+	/**
+	 * generate random whole number between 100 - 5000
+	 */
+	init = () => {
+		const randomNumber = Math.floor(Math.random() * 5000) + 100;
+		this.updateData(randomNumber);
+	};
+
+	/**
+	 * add firebase real-time listener
+	 */
+	addFirebaseRealTimeListener = () => {
+		const { gameRef } = this.state;
+		const { gameState } = this.props;
+
+		// game ref
 		gameRef
-			.on('child_added', (snap) => {
+			.child(gameState.type)
+			.on('value', (snap) => {
 				if (snap.exists()) {
-					console.log('s');
 					const data = snap.val();
+
 					// turn: cpu
-					if (!data.history.userTurn) {
+					if (!data.history.userTurn && data.history.number > 1) {
 						// evaluate to true if the variable is divisible by 3
 						this.addNextMove(this.validateNumberForNextMove(data.history.number));
 					}
@@ -85,19 +121,10 @@ class Game extends Component {
 	};
 
 	/**
-	 * generate random whole number between 100 - 5000
-	 */
-	init = () => {
-		const randomNumber = Math.floor(Math.random() * 5000) + 100;
-
-		// update
-		this.updateData(randomNumber);
-	};
-
-	/**
 	 * evaluate to true if the variable is divisible by 3
 	 *
 	 * @param num
+	 * @returns {string}
 	 */
 	validateNumberForNextMove = (num) => {
 		let value = '-1';
@@ -155,6 +182,18 @@ class Game extends Component {
 				.child(gameState.type)
 				.update({ history: dataPayload })
 				.then();
+
+			// scroll element to end
+			this.myRef.current.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'center',
+			});
+
+			// if number reaches 1
+			if (value === 1) {
+				this.setState({ finalOutcome: true });
+			}
 		});
 	};
 }
