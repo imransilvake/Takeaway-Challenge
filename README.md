@@ -1,7 +1,8 @@
 # Takeaway Challenge
 This game application is using React-Seed that is based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
 
-![Alt text](preview.png?raw=true "slack-clone")
+<img src="preview.png" width="40%">
+
 
 ## Content
 - [X] Firebase Database REST API
