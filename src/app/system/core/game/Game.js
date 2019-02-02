@@ -21,19 +21,19 @@ class Game extends Component {
 		finalOutcome: false
 	};
 
+	componentDidMount() {
+		this.addGameListener();
+
+		// create element ref
+		this.myRef = React.createRef();
+	}
+
 	componentWillUnmount() {
 		const { gameRef } = this.state;
 		const { gameState } = this.props;
 
 		// remove live listener
 		gameRef.child(gameState.type).off();
-	}
-
-	componentDidMount() {
-		this.addGameListener();
-
-		// create element ref
-		this.myRef = React.createRef();
 	}
 
 	render() {
@@ -55,7 +55,7 @@ class Game extends Component {
 								<div className="tc-desc">
 									{ item.action && (<h5>{item.action}</h5>) }
 									{ item.action && (<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>) }
-									<p ref={history.length - 1 === i ? this.myRef: null}>{item.number}</p>
+									<p ref={history.length - 1 === i ? this.myRef : null}>{item.number}</p>
 								</div>
 							</div>
 						))
@@ -64,14 +64,17 @@ class Game extends Component {
 
 				{/* Buttons */}
 				<div className="tc-buttons">
-					<Button disabled={!userTurn || allowedNumber !== '-1' || finalOutcome}
-							onClick={() => this.addNextMove('-1')}>-1
+					<Button
+						disabled={!userTurn || allowedNumber !== '-1' || finalOutcome}
+						onClick={() => this.addNextMove('-1')}>-1
 					</Button>
-					<Button disabled={!userTurn || allowedNumber !== '0' || finalOutcome}
-							onClick={() => this.addNextMove('0')}>0
+					<Button
+						disabled={!userTurn || allowedNumber !== '0' || finalOutcome}
+						onClick={() => this.addNextMove('0')}>0
 					</Button>
-					<Button disabled={!userTurn || allowedNumber !== '+1' || finalOutcome}
-							onClick={() => this.addNextMove('+1')}>+1
+					<Button
+						disabled={!userTurn || allowedNumber !== '+1' || finalOutcome}
+						onClick={() => this.addNextMove('+1')}>+1
 					</Button>
 				</div>
 			</section>
@@ -159,7 +162,7 @@ class Game extends Component {
 	 * @param action
 	 */
 	updateData = (value, action = '') => {
-		const { gameRef, userTurn } = this.state;
+		const { gameRef, userTurn, history } = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
 		const dataPayload = {
@@ -170,7 +173,7 @@ class Game extends Component {
 
 		// set state
 		this.setState({
-			history: this.state.history.concat(dataPayload),
+			history: history.concat(dataPayload),
 			userTurn: !userTurn,
 			allowedNumber
 		}, () => {
@@ -187,7 +190,7 @@ class Game extends Component {
 			this.myRef.current.scrollIntoView({
 				behavior: 'smooth',
 				block: 'center',
-				inline: 'center',
+				inline: 'center'
 			});
 
 			// if number reaches 1
