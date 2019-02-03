@@ -25,5 +25,17 @@
 	},
 	"GAME": {
 		"ALERT": "{{ type }} Zug endet in {{ time }} Sekunden. Machen Sie einen Schritt, um im Spiel zu bleiben!"
+	},
+	"LOGS": {
+		"EMPTY": "Leeres Protokoll",
+		"LOADING": "Wird geladen...",
+		"TITLE": "Spiele gespielt: {{ value }}",
+		"GAME": {
+			"ID": "Spiel: {{ value }}",
+			"MODE": "Modus:",
+			"STATUS": "Status:",
+			"WINNER": "Gewinner:",
+			"DATE": "Datum:"
+		}
 	}
 }

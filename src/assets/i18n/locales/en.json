@@ -25,5 +25,17 @@
 	},
 	"GAME": {
 		"ALERT": "{{ type }} turn end in {{ time }} seconds. Make a move to stay in the game!"
+	},
+	"LOGS": {
+		"EMPTY": "Empty Log",
+		"LOADING": "Loading...",
+		"TITLE": "Games Played: {{ value }}",
+		"GAME": {
+			"ID": "Game: {{ value }}",
+			"MODE": "Mode:",
+			"STATUS": "Status:",
+			"WINNER": "Winner:",
+			"DATE": "Date:"
+		}
 	}
 }

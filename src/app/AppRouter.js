@@ -5,7 +5,6 @@ import connect from 'react-redux/es/connect/connect';
 
 // app
 import ENV from '../environment/index';
-import Component404 from './system/frame/404/Component404';
 import Home from './system/frame/home/Home';
 import Game from './system/core/game/Game';
 import Logs from './system/frame/logs/Logs';
@@ -27,7 +26,6 @@ class AppRouter extends Component {
 							<Redirect to={ENV.ROUTING.HOME}/>
 						)
 					)}/>
-				<Route from="*" component={Component404}/>
 			</Switch>
 		);
 	}

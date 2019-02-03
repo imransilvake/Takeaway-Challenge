@@ -1,0 +1,28 @@
+.tc-logs {
+	h5 {
+		background-color: cd-palette($cd-background, 2013);
+		font-size: cd-fontSize(s16);
+		padding: 10px;
+		text-align: center;
+
+		&.ts-empty {
+			align-items: center;
+			display: flex;
+			justify-content: center;
+		}
+	}
+
+	.tc-list {
+		.tc-log {
+			padding: 10px;
+
+			&:not(:last-child) {
+				border-bottom: 1px solid cd-palette($cd-border, 3004);
+			}
+
+			span {
+				color: cd-palette($cd-color, 1006);
+			}
+		}
+	}
+}

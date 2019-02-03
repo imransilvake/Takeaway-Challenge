@@ -15,6 +15,7 @@ import GameButtons from './GameButtons';
 class Game extends Component {
 	state = {
 		gameRef: firebase.database().ref('game'),
+		gameLogsRef: firebase.database().ref('logs'),
 		history: [],
 		userTurn: true,
 		allowedNumber: 0,
@@ -33,14 +34,15 @@ class Game extends Component {
 	}
 
 	componentWillUnmount() {
-		const { gameRef } = this.state;
+		const { gameRef, gameLogsRef } = this.state;
 		const { gameState } = this.props;
 
 		// log game state
 		this.logGameState();
 
-		// remove live listener
+		// remove live listeners
 		gameRef.child(gameState.type).off();
+		gameLogsRef.off();
 
 		// clear timer
 		this.clearTimer(this.timer);
@@ -209,10 +211,7 @@ class Game extends Component {
 			gameRef
 				.child(gameState.type)
 				.remove()
-				.then(() => {
-					// log game state
-					this.logGameState();
-				});
+				.then();
 
 			// timeout added to delay the route and show the final move on the screen.
 			// usually I don't recommend using setTimeout in a project.
@@ -272,20 +271,20 @@ class Game extends Component {
 	 * log game state
 	 */
 	logGameState = () => {
-		const { gameRef, userTurn, history } = this.state;
+		const { gameLogsRef, userTurn, history } = this.state;
 		const { gameState } = this.props;
-		const isFinished = history && history[history.length-1].number === 1;
+		const isFinished = history && history[history.length - 1].number === 1;
 
 		// payload
 		const logPayload = {
 			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player vs Player',
 			status: isFinished ? 'Finished' : 'Interrupted',
-			winner: userTurn ? 'CPU' : 'Player'
+			winner: userTurn ? 'CPU' : 'Player',
+			timestamp: Date.now()
 		};
 
 		// update log to firebase real-time database
-		gameRef
-			.child('logs')
+		gameLogsRef
 			.push(logPayload)
 			.then();
 	};
