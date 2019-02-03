@@ -28,6 +28,19 @@
 				}
 			}
 		}
+
+		.tc-logs {
+			margin-top: 10px;
+
+			button {
+				background: transparent;
+				border: 0;
+				color: cd-palette($cd-color, 1001);
+				outline: 0;
+				text-decoration: underline;
+				text-transform: capitalize;
+			}
+		}
 	}
 
 	.tc-additional {

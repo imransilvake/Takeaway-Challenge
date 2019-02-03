@@ -5,7 +5,8 @@
 		"SUBTITLE": "Choose your opponent!",
 		"BUTTONS": {
 			"CPU": "CPU",
-			"REAL": "Real Player"
+			"REAL": "Real Player",
+			"LOGS": "Logs"
 		},
 		"RESULT": {
 			"WINNER": {

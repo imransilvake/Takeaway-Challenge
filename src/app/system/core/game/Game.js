@@ -36,6 +36,9 @@ class Game extends Component {
 		const { gameRef } = this.state;
 		const { gameState } = this.props;
 
+		// log game state
+		this.logGameState();
+
 		// remove live listener
 		gameRef.child(gameState.type).off();
 
@@ -205,8 +208,11 @@ class Game extends Component {
 			// empty data from firebase
 			gameRef
 				.child(gameState.type)
-				.update({ history: '' })
-				.then();
+				.remove()
+				.then(() => {
+					// log game state
+					this.logGameState();
+				});
 
 			// timeout added to delay the route and show the final move on the screen.
 			// usually I don't recommend using setTimeout in a project.
@@ -260,6 +266,28 @@ class Game extends Component {
 	clearTimer = (timer) => {
 		// clear interval
 		clearInterval(timer);
+	};
+
+	/**
+	 * log game state
+	 */
+	logGameState = () => {
+		const { gameRef, userTurn, history } = this.state;
+		const { gameState } = this.props;
+		const isFinished = history && history[history.length-1].number === 1;
+
+		// payload
+		const logPayload = {
+			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player vs Player',
+			status: isFinished ? 'Finished' : 'Interrupted',
+			winner: userTurn ? 'CPU' : 'Player'
+		};
+
+		// update log to firebase real-time database
+		gameRef
+			.child('logs')
+			.push(logPayload)
+			.then();
 	};
 }
 

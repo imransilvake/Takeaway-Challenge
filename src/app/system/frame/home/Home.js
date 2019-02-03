@@ -34,6 +34,15 @@ class Home extends Component {
 							<Button onClick={this.startGame('player')}>{i18n.t('HOME.BUTTONS.REAL')}</Button>
 						</Link>
 					</div>
+					<div className="tc-logs">
+						{
+							!location.state && (
+								<Link to={ENV.ROUTING.LOGS}>
+									<Button>{i18n.t('HOME.BUTTONS.LOGS')}</Button>
+								</Link>
+							)
+						}
+					</div>
 				</div>
 				<div className="tc-additional">
 					{!location.state && (<p>{i18n.t('HOME.ADDITION.NOTE')}</p>)}

@@ -8,6 +8,7 @@ import ENV from '../environment/index';
 import Component404 from './system/frame/404/Component404';
 import Home from './system/frame/home/Home';
 import Game from './system/core/game/Game';
+import Logs from './system/frame/logs/Logs';
 import Redirect from 'react-router-dom/es/Redirect';
 import { withNamespaces } from 'react-i18next';
 
@@ -16,6 +17,7 @@ class AppRouter extends Component {
 		return (
 			<Switch>
 				<Route exact path={ENV.ROUTING.HOME} component={Home}/>
+				<Route exact path={ENV.ROUTING.LOGS} component={Logs}/>
 				<Route
 					path={ENV.ROUTING.HOME}
 					render={props => (
