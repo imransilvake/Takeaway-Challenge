@@ -1,20 +1,23 @@
 # Takeaway Challenge
 Takeaway Challenge is an application based using React-Seed that is itself based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
-This Game lets you:
-- Play against CPU or another Player
-- Manages Logs of the Game
-- Support Language Change
+This Game lets you: [Play Now](https://takeaway-challenge.firebaseapp.com/)
 
 <p align="center">
 <img src="preview.png" width="60%">
-<a href="https://takeaway-challenge.firebaseapp.com/">Play Now</a>
 </p>
 
 
 ## Content
-- [X] Usage of Firebase Database REST API
-- [X] Usage of Redux
-- [X] Usage of SCSS
+#### Game Specific
+- [X] Play against CPU or another Player
+- [X] Management of Logs of the application
+- [X] Language Support (EN/DE)
+- [X] Clean and Responsive Layout
+
+#### Code Specific
+- [X] Firebase Real-time Database
+- [X] Redux
+- [X] Inclusion of SCSS
 - [X] Support JSX and StyleLint 
 - [X] Internationalization (i18n)
 
@@ -31,6 +34,7 @@ This Game lets you:
 - [X] [Firebase](https://firebase.google.com/)
 - [X] [Material-UI](https://material-ui.com/)
 - [X] [Classnames](https://github.com/JedWatson/classnames)
+- [X] [Moment](https://momentjs.com/)
 
 
 ## Information
