@@ -24,5 +24,10 @@
 			opacity: .5;
 			pointer-events: none;
 		}
+
+		&:hover {
+			background-color: cd-palette($cd-background, 2012);
+			opacity: .9;
+		}
 	}
 }
