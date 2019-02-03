@@ -1,6 +1,5 @@
 // react
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 
 // firebase
@@ -8,10 +7,10 @@ import firebase from '../../../../firebase';
 
 // app
 import ENV from '../../../../environment';
-import i18n from '../../../../assets/i18n/i18n';
-import PlayerImage from '../../../../assets/images/player-dp.png';
-import CPUImage from '../../../../assets/images/cpu-dp.png';
 import { updateGame } from '../../../store/actions/GameAction';
+import GameAlert from './GameAlert';
+import GameMoves from './GameMoves';
+import GameButtons from './GameButtons';
 
 class Game extends Component {
 	state = {
@@ -39,6 +38,9 @@ class Game extends Component {
 
 		// remove live listener
 		gameRef.child(gameState.type).off();
+
+		// clear timer
+		this.clearTimer(this.timer);
 	}
 
 	render() {
@@ -46,46 +48,26 @@ class Game extends Component {
 
 		return (
 			<section className="tc-game tc-view-height">
-				{/* Notice */}
-				<div className="tc-alert">
-					<p>{i18n.t('GAME.ALERT', { type: userTurn ? 'Your' : 'CPU', time: 20 - timer })}</p>
-				</div>
+				{/* Alert */}
+				<GameAlert
+					userTurn={userTurn}
+					timer={timer}
+				/>
 
 				{/* Moves */}
-				<div className="tc-moves">
-					{
-						history && history.length && history.map((item, i) => (
-							<div key={i} className={!item.userTurn ? 'tc-user' : 'tc-user tc-opponent'}>
-								<img className="tc-avatar" src={!item.userTurn ? PlayerImage : CPUImage} alt="cpu"/>
-								<div className="tc-desc">
-									{item.action && (<h5>{item.action}</h5>)}
-									{
-										item.action && (
-											<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>
-										)
-									}
-									<p ref={history.length - 1 === i ? this.myRef : null}>{item.number}</p>
-								</div>
-							</div>
-						))
-					}
-				</div>
+				<GameMoves
+					history={history}
+					myRef={this.myRef}
+				/>
 
 				{/* Buttons */}
-				<div className="tc-buttons">
-					<Button
-						disabled={!userTurn || allowedNumber !== '-1' || finalOutcome}
-						onClick={() => this.addNextMove('-1')}>-1
-					</Button>
-					<Button
-						disabled={!userTurn || allowedNumber !== '0' || finalOutcome}
-						onClick={() => this.addNextMove('0')}>0
-					</Button>
-					<Button
-						disabled={!userTurn || allowedNumber !== '+1' || finalOutcome}
-						onClick={() => this.addNextMove('+1')}>+1
-					</Button>
-				</div>
+				<GameButtons
+					userTurn={userTurn}
+					allowedNumber={allowedNumber}
+					finalOutcome={finalOutcome}
+					updateData={this.updateData}
+					addNextMove={this.addNextMove}
+				/>
 			</section>
 		);
 	}
@@ -129,7 +111,7 @@ class Game extends Component {
 						this.addNextMove(this.validateNumberForNextMove(data.history.number));
 					}
 				}
-			})
+			});
 	};
 
 	/**
@@ -252,8 +234,8 @@ class Game extends Component {
 
 			// validate user status
 			if (seconds === 20) {
-				// clear interval
-				clearInterval(this.timer);
+				// clear timer
+				this.clearTimer(this.timer);
 
 				// end game
 				this.endGame();
@@ -265,11 +247,19 @@ class Game extends Component {
 	 * restart timer
 	 */
 	restartTimer = () => {
-		// clear interval
-		clearInterval(this.timer);
+		// clear timer
+		this.clearTimer(this.timer);
 
 		// start timer
 		this.startTimer();
+	};
+
+	/**
+	 * clear timer
+	 */
+	clearTimer = (timer) => {
+		// clear interval
+		clearInterval(timer);
 	};
 }
 

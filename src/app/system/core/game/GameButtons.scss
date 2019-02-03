@@ -1,0 +1,28 @@
+.tc-game-buttons {
+	background-color: cd-palette($cd-background, 2001);
+	border-top: 1px solid cd-palette($cd-border, 3004);
+	bottom: 35px;
+	box-shadow: 0 -1px 4px 0 cd-palette($cd-shadow, 4002, .3);
+	left: 0;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	position: absolute;
+	right: 0;
+	text-align: center;
+
+	button {
+		background-color: cd-palette($cd-background, 2012);
+		border-radius: 50%;
+		color: cd-palette($cd-color, 1001);
+		margin: 0 10px;
+		min-height: 40px;
+		min-width: 40px;
+		padding: 0;
+		width: 40px;
+
+		&:disabled {
+			opacity: .5;
+			pointer-events: none;
+		}
+	}
+}
