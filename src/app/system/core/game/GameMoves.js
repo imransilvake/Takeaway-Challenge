@@ -6,7 +6,7 @@ import PlayerImage from '../../../../assets/images/player-dp.png';
 import CPUImage from '../../../../assets/images/cpu-dp.png';
 
 const GameMoves = (props) => {
-	const { history } = props.history;
+	const { history } = props;
 
 	return (
 		<section className="tc-game-moves">
