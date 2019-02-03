@@ -26,8 +26,12 @@
 		}
 
 		&:hover {
-			background-color: cd-palette($cd-background, 2012);
-			opacity: .9;
+			background-color: cd-palette($cd-background, 2012) !important;
+			opacity: .5;
+		}
+
+		&:not(:disabled) {
+			opacity: 1 !important;
 		}
 	}
 }

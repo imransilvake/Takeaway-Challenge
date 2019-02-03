@@ -4,4 +4,9 @@
 	margin: 0 auto;
 	max-width: 320px;
 	position: relative;
+
+	// media
+	@include cd-media(desktop, tablet) {
+		max-width: 100%;
+	}
 }
