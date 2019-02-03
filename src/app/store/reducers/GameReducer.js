@@ -22,6 +22,11 @@ const gameReducer = (state = initGameState, action) => {
 				...state,
 				value: action.payload
 			};
+		case actionTypes.EXIT_GAME:
+			return {
+				...state,
+				start: false
+			};
 		default:
 			return state;
 	}

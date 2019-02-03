@@ -63,7 +63,7 @@ class Logs extends Component {
 								{
 									logs.map((log, i) => (
 										<article key={i} className="tc-log">
-											<h6>{i18n.t('LOGS.GAME.ID', { value: i + 1 })}</h6>
+											<h6>{i18n.t('LOGS.GAME.ID', { value: logs.length - i })}</h6>
 											<p><span>{i18n.t('LOGS.GAME.MODE')}</span> {log.mode}</p>
 											<p><span>{i18n.t('LOGS.GAME.STATUS')}</span> {log.status}</p>
 											<p><span>{i18n.t('LOGS.GAME.WINNER')}</span> {log.winner}</p>

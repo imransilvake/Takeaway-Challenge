@@ -16,3 +16,11 @@ export const updateGame = (value) => {
 		payload: value
 	};
 };
+
+// exit game
+export const exitGame = () => {
+	return {
+		type: actionTypes.EXIT_GAME
+	};
+};
+

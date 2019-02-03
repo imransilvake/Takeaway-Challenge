@@ -7,7 +7,7 @@ import firebase from '../../../../firebase';
 
 // app
 import ENV from '../../../../environment';
-import { updateGame } from '../../../store/actions/GameAction';
+import { exitGame, updateGame } from '../../../store/actions/GameAction';
 import GameAlert from './GameAlert';
 import GameMoves from './GameMoves';
 import GameButtons from './GameButtons';
@@ -15,6 +15,7 @@ import GameButtons from './GameButtons';
 class Game extends Component {
 	state = {
 		gameRef: firebase.database().ref('game'),
+		gameRefKey: '',
 		gameLogsRef: firebase.database().ref('logs'),
 		history: [],
 		userTurn: true,
@@ -24,13 +25,11 @@ class Game extends Component {
 	};
 
 	componentDidMount() {
-		this.addGameListener();
+		// init game
+		this.initGame();
 
 		// create element ref
 		this.myRef = React.createRef();
-
-		// start timer
-		this.startTimer();
 	}
 
 	componentWillUnmount() {
@@ -78,17 +77,6 @@ class Game extends Component {
 	}
 
 	/**
-	 * add game listener
-	 */
-	addGameListener = () => {
-		// init game
-		this.initGame();
-
-		// add firebase real-time listener
-		this.addFirebaseRealTimeListener();
-	};
-
-	/**
 	 * generate random whole number between 100 - 5000
 	 */
 	initGame = () => {
@@ -100,23 +88,26 @@ class Game extends Component {
 	 * add firebase real-time listener
 	 */
 	addFirebaseRealTimeListener = () => {
-		const { gameRef } = this.state;
+		const { gameRef, gameRefKey } = this.state;
 		const { gameState } = this.props;
 
 		// game ref
-		gameRef
-			.child(gameState.type)
-			.on('value', (snap) => {
-				if (snap.exists()) {
-					const data = snap.val();
+		if (gameRefKey) {
+			gameRef
+				.child(gameState.type)
+				.child(gameRefKey)
+				.on('value', (snap) => {
+					if (snap.exists()) {
+						const data = snap.val();
 
-					// turn: cpu
-					if (!data.history.userTurn && data.history.number > 1) {
-						// evaluate to true if the variable is divisible by 3
-						this.addNextMove(this.validateNumberForNextMove(data.history.number));
+						// turn: cpu
+						if (!data.history.userTurn && data.history.number > 1) {
+							// evaluate to true if the variable is divisible by 3
+							this.addNextMove(this.validateNumberForNextMove(data.history.number));
+						}
 					}
-				}
-			});
+				});
+		}
 	};
 
 	/**
@@ -158,7 +149,7 @@ class Game extends Component {
 	 * @param action
 	 */
 	updateData = (value, action = '') => {
-		const { gameRef, userTurn, history } = this.state;
+		const { gameRef, userTurn, history, gameRefKey} = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
 		const dataPayload = {
@@ -173,17 +164,35 @@ class Game extends Component {
 			userTurn: !userTurn,
 			allowedNumber
 		}, () => {
-			// restart timer
-			this.restartTimer();
-
 			// store game state to redux
 			this.props.updateGame(value);
 
-			// update to firebase real-time database
-			gameRef
-				.child(gameState.type)
-				.update({ history: dataPayload })
-				.then();
+			// at start of game
+			if (gameRefKey === '') {
+				// update to firebase real-time database
+				const gameRefKey = gameRef
+					.child(gameState.type)
+					.push({ history: dataPayload })
+					.key;
+
+				// set state
+				this.setState({ gameRefKey: gameRefKey }, () => {
+					// start timer
+					this.startTimer();
+
+					// add firebase real-time listener
+					this.addFirebaseRealTimeListener();
+				});
+			} else {
+				gameRef
+					.child(gameState.type)
+					.child(gameRefKey)
+					.update({ history: dataPayload })
+					.then(() => {
+						// restart timer
+						this.restartTimer();
+					});
+			}
 
 			// scroll element to end
 			this.myRef.current.scrollIntoView({
@@ -193,6 +202,7 @@ class Game extends Component {
 
 			// if number reaches 1, we need to finish the game and declare the winner.
 			if (value === 1) {
+				// end game
 				this.endGame();
 			}
 		});
@@ -202,17 +212,10 @@ class Game extends Component {
 	 * end the game
 	 */
 	endGame = () => {
-		const { gameRef, userTurn } = this.state;
-		const { gameState } = this.props;
+		const { userTurn } = this.state;
 
 		// set state
 		this.setState({ finalOutcome: true }, () => {
-			// empty data from firebase
-			gameRef
-				.child(gameState.type)
-				.remove()
-				.then();
-
 			// timeout added to delay the route and show the final move on the screen.
 			// usually I don't recommend using setTimeout in a project.
 			setTimeout(() => {
@@ -222,6 +225,9 @@ class Game extends Component {
 						result: !userTurn
 					}
 				});
+
+				// store game state to redux
+				this.props.exitGame();
 			}, 1000);
 		});
 	};
@@ -238,7 +244,7 @@ class Game extends Component {
 			this.setState({ timer: seconds });
 
 			// validate user status
-			if (seconds === 20) {
+			if (seconds === 30) {
 				// clear timer
 				this.clearTimer(this.timer);
 
@@ -271,7 +277,7 @@ class Game extends Component {
 	 * log game state
 	 */
 	logGameState = () => {
-		const { gameLogsRef, userTurn, history } = this.state;
+		const { gameRef, gameRefKey, gameLogsRef, userTurn, history } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].number === 1;
 
@@ -286,8 +292,15 @@ class Game extends Component {
 		// update log to firebase real-time database
 		gameLogsRef
 			.push(logPayload)
-			.then();
+			.then(() => {
+				// empty data from firebase
+				gameRef
+					.child(gameState.type)
+					.child(gameRefKey)
+					.remove()
+					.then();
+			});
 	};
 }
 
-export default connect(null, { updateGame })(Game);
+export default connect(null, { updateGame, exitGame })(Game);
