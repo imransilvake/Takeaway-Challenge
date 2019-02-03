@@ -8,7 +8,8 @@ Takeaway Challenge is an application based using React-Seed that is itself based
 
 ## Content
 #### Game Specific
-- [X] Play against CPU or another Player
+- [X] Play against CPU
+- [ ] Play against another Player
 - [X] Management of Logs of the application
 - [X] Language Support (EN/DE)
 - [X] Clean and Responsive Layout
