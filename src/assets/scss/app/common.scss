@@ -1,5 +1,5 @@
 .tc-view-height {
 	height: calc(100vh - 39px - 35px);
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
+	overflow-x: hidden;
+	overflow-y: auto;
 }

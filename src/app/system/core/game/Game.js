@@ -49,6 +49,7 @@ class Game extends Component {
 
 	render() {
 		const { history, userTurn, allowedNumber, finalOutcome, timer } = this.state;
+		const { gameState } = this.props;
 
 		return (
 			<section className="tc-game tc-view-height">
@@ -60,6 +61,7 @@ class Game extends Component {
 
 				{/* Moves */}
 				<GameMoves
+					gameType={gameState.type}
 					history={history}
 					myRef={this.myRef}
 				/>

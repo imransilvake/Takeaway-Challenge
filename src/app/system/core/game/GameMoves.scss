@@ -5,7 +5,7 @@
 		display: flex;
 
 		.tc-avatar {
-			background-color: cd-palette($cd-background, 2012);
+			background-color: cd-palette($cd-background, 2014);
 			border-radius: 50%;
 			float: left;
 			height: 35px;
@@ -38,6 +38,10 @@
 
 		&.tc-opponent {
 			direction: rtl;
+
+			.tc-avatar {
+				background-color: cd-palette($cd-background, 2012);
+			}
 
 			.tc-desc {
 				direction: ltr;
