@@ -1,6 +1,5 @@
 # Takeaway Challenge
-Takeaway Challenge is an application based using React-Seed that is itself based on create-react-app and it incorporates many best practices typically needed in Enterprise apps.
-This Game lets you: [Play Now](https://takeaway-challenge.firebaseapp.com/)
+Takeaway Challenge is an application based using React-Seed that is itself based on create-react-app and it incorporates many best practices typically needed in Enterprise apps. [Play Now](https://takeaway-challenge.firebaseapp.com/)
 
 <p align="center">
 <img src="preview.png" width="60%">
