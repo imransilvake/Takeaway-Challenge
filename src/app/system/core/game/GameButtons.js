@@ -5,20 +5,21 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 const GameButtons = (props) => {
-	const { userTurn, allowedNumber, finalOutcome } = props;
+	const { firstPlayerTurn, allowedNumber, history } = props;
+	const isEnd = history && history.length > 0 && history[history.length -1].number === 1;
 
 	return (
 		<section className="tc-game-buttons">
 			<Button
-				disabled={!userTurn || allowedNumber !== '-1' || finalOutcome}
+				disabled={!firstPlayerTurn || allowedNumber !== '-1' || isEnd}
 				onClick={() => props.addNextMove('-1')}>-1
 			</Button>
 			<Button
-				disabled={!userTurn || allowedNumber !== '0' || finalOutcome}
+				disabled={!firstPlayerTurn || allowedNumber !== '0' || isEnd}
 				onClick={() => props.addNextMove('0')}>0
 			</Button>
 			<Button
-				disabled={!userTurn || allowedNumber !== '+1' || finalOutcome}
+				disabled={!firstPlayerTurn || allowedNumber !== '+1' || isEnd}
 				onClick={() => props.addNextMove('+1')}>+1
 			</Button>
 		</section>

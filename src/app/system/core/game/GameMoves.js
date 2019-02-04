@@ -19,8 +19,8 @@ const GameMoves = (props) => {
 		<section className="tc-game-moves">
 			{
 				history && history.length && history.map((item, i) => (
-					<div key={i} className={!item.userTurn ? 'tc-user' : 'tc-user tc-opponent'}>
-						<img className="tc-avatar" src={!item.userTurn ? PlayerImage : opponentImage} alt={gameType}/>
+					<div key={i} className={!item.firstPlayerTurn ? 'tc-user' : 'tc-user tc-opponent'}>
+						<img className="tc-avatar" src={!item.firstPlayerTurn ? PlayerImage : opponentImage} alt={gameType}/>
 						<div className="tc-desc">
 							{item.action && (<h5>{item.action}</h5>)}
 							{
