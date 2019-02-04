@@ -15,7 +15,7 @@ const GameAlert = (props) => {
 
 	return (
 		<section className="tc-game-alert cd-center-align">
-			<p>{i18n.t('GAME.ALERT', { type: firstPlayerTurn ? 'Your' : opponentName, time: 30 - timer })}</p>
+			<p>{i18n.t('GAME.ALERT', { type: firstPlayerTurn ? 'Your' : opponentName, time: 300 - timer })}</p>
 		</section>
 	)
 };
