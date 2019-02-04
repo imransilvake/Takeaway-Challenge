@@ -70,7 +70,6 @@ class Game extends Component {
 					history={history}
 					firstPlayerTurn={firstPlayerTurn}
 					allowedNumber={allowedNumber}
-					updateData={this.updateData}
 					addNextMove={this.addNextMove}
 				/>
 			</section>
@@ -82,16 +81,16 @@ class Game extends Component {
 	 */
 	initGame = () => {
 		const randomNumber = Math.floor(Math.random() * 5000) + 100;
-		this.updateData(randomNumber);
+		this.updateGame(randomNumber);
 	};
 
 	/**
-	 * update data to firebase and redux
+	 * update game state: firebase and redux
 	 *
 	 * @param value
 	 * @param action
 	 */
-	updateData = (value, action = '') => {
+	updateGame = (value, action = '') => {
 		const { gameRef, firstPlayerTurn, history, gameRefKey} = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
@@ -208,7 +207,7 @@ class Game extends Component {
 		const value = (oldValue.number + (Number(action))) / 3;
 
 		// update
-		this.updateData(value, action);
+		this.updateGame(value, action);
 	};
 
 	/**

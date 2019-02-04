@@ -8,7 +8,7 @@ import CPUImage from '../../../../assets/images/cpu.png';
 
 const GameMoves = (props) => {
 	let opponentImage = CPUImage;
-	const { history, gameType } = props;
+	const { history, gameType, myRef } = props;
 
 	// choose player Image
 	if (gameType !== 'cpu') {
@@ -28,7 +28,7 @@ const GameMoves = (props) => {
 									<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>
 								)
 							}
-							<p ref={history.length - 1 === i ? props.myRef : null}>{item.number}</p>
+							<p ref={history.length - 1 === i ? myRef : null}>{item.number}</p>
 						</div>
 					</div>
 				))
