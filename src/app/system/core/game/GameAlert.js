@@ -5,11 +5,17 @@ import React from 'react';
 import i18n from '../../../../assets/i18n/i18n';
 
 const GameAlert = (props) => {
-	const { firstPlayerTurn, timer } = props;
+	let opponentName = 'CPU';
+	const { gameState, firstPlayerTurn, timer } = props;
+
+	// set opponent name
+	if (gameState.type !== 'cpu') {
+		opponentName = 'Player';
+	}
 
 	return (
 		<section className="tc-game-alert">
-			<p>{i18n.t('GAME.ALERT', { type: firstPlayerTurn ? 'Your' : 'CPU', time: 30 - timer })}</p>
+			<p>{i18n.t('GAME.ALERT', { type: firstPlayerTurn ? 'Your' : opponentName, time: 30 - timer })}</p>
 		</section>
 	)
 };

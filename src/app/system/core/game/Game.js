@@ -47,6 +47,7 @@ class Game extends Component {
 			<section className="tc-game tc-view-height">
 				{/* Alert */}
 				<GameAlert
+					gameState={gameState}
 					firstPlayerTurn={firstPlayerTurn}
 					timer={timer}
 				/>
@@ -70,10 +71,13 @@ class Game extends Component {
 	}
 
 	/**
-	 * generate random whole number between 100 - 5000
+	 * init game
 	 */
 	initGame = () => {
+		// generate random whole number between 100 - 5000
 		const randomNumber = Math.floor(Math.random() * 5000) + 100;
+
+		// update game
 		this.updateGame(randomNumber);
 	};
 
@@ -100,7 +104,7 @@ class Game extends Component {
 			firstPlayerTurn: !firstPlayerTurn,
 			allowedNumber
 		}, () => {
-			// store game state to redux
+			// update game state to redux
 			this.props.updateGame(value);
 
 			// random turn: first push to database
@@ -145,7 +149,7 @@ class Game extends Component {
 	};
 
 	/**
-	 * end the game
+	 * end game
 	 */
 	endGame = () => {
 		const { firstPlayerTurn } = this.state;
@@ -160,7 +164,7 @@ class Game extends Component {
 				}
 			});
 
-			// store game state to redux
+			// update game state to redux
 			this.props.exitGame();
 		}, 1000);
 	};
@@ -218,7 +222,7 @@ class Game extends Component {
 		const oldValue = history[history.length - 1];
 		const value = (oldValue.number + (Number(action))) / 3;
 
-		// update
+		// update game
 		this.updateGame(value, action);
 	};
 
