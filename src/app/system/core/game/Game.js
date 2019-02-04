@@ -7,10 +7,10 @@ import firebase from '../../../../firebase';
 
 // app
 import ENV from '../../../../environment';
-import { exitGame, updateGame } from '../../../store/actions/GameAction';
 import GameAlert from './GameAlert';
 import GameMoves from './GameMoves';
 import GameButtons from './GameButtons';
+import { exitGame, updateGame } from '../../../store/actions/GameAction';
 
 class Game extends Component {
 	state = {
@@ -186,9 +186,11 @@ class Game extends Component {
 					const lastHistoryItem = data.history[data.history.length-1];
 
 					// turn: cpu
-					if (!lastHistoryItem.firstPlayerTurn && lastHistoryItem.number > 1) {
-						// evaluate to true if the variable is divisible by 3
-						this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
+					if (gameState.type === 'cpu') {
+						if (!lastHistoryItem.firstPlayerTurn && lastHistoryItem.number > 1) {
+							// evaluate to true if the variable is divisible by 3
+							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
+						}
 					}
 				}
 			});
