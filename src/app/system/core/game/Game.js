@@ -32,15 +32,8 @@ class Game extends Component {
 	}
 
 	componentWillUnmount() {
-		const { gameRef, gameLogsRef } = this.state;
-		const { gameState } = this.props;
-
 		// log game state
 		this.logGameState();
-
-		// remove live listeners
-		gameRef.child(gameState.type).off();
-		gameLogsRef.off();
 
 		// clear timer
 		this.clearTimer(this.timer);
@@ -152,6 +145,27 @@ class Game extends Component {
 	};
 
 	/**
+	 * end the game
+	 */
+	endGame = () => {
+		const { firstPlayerTurn } = this.state;
+
+		// timeout added to delay the route and show the final move on the screen.
+		// usually I don't recommend using setTimeout in a project.
+		setTimeout(() => {
+			this.props.history.push({
+				pathname: ENV.ROUTING.HOME,
+				state: {
+					result: !firstPlayerTurn
+				}
+			});
+
+			// store game state to redux
+			this.props.exitGame();
+		}, 1000);
+	};
+
+	/**
 	 * add firebase real-time listener
 	 */
 	addFirebaseRealTimeListener = () => {
@@ -208,27 +222,6 @@ class Game extends Component {
 
 		// update
 		this.updateGame(value, action);
-	};
-
-	/**
-	 * end the game
-	 */
-	endGame = () => {
-		const { firstPlayerTurn } = this.state;
-
-		// timeout added to delay the route and show the final move on the screen.
-		// usually I don't recommend using setTimeout in a project.
-		setTimeout(() => {
-			this.props.history.push({
-				pathname: ENV.ROUTING.HOME,
-				state: {
-					result: !firstPlayerTurn
-				}
-			});
-
-			// store game state to redux
-			this.props.exitGame();
-		}, 1000);
 	};
 
 	/**
@@ -297,7 +290,11 @@ class Game extends Component {
 					.child(gameState.type)
 					.child(gameRefKey)
 					.remove()
-					.then();
+					.then(() => {
+						// remove live listeners
+						gameRef.child(gameState.type).off();
+						gameLogsRef.off();
+					});
 			});
 	};
 }
