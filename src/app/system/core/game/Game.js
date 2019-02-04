@@ -172,24 +172,22 @@ class Game extends Component {
 		const { gameRef, gameRefKey } = this.state;
 		const { gameState } = this.props;
 
-		// game ref
-		if (gameRefKey) {
-			gameRef
-				.child(gameState.type)
-				.child(gameRefKey)
-				.on('value', (snap) => {
-					if (snap.exists()) {
-						const data = snap.val();
-						const lastHistoryItem = data.history[data.history.length-1];
+		// real-time database live listener
+		gameRef
+			.child(gameState.type)
+			.child(gameRefKey)
+			.on('value', (snap) => {
+				if (snap.exists()) {
+					const data = snap.val();
+					const lastHistoryItem = data.history[data.history.length-1];
 
-						// turn: cpu
-						if (!lastHistoryItem.firstPlayerTurn && lastHistoryItem.number > 1) {
-							// evaluate to true if the variable is divisible by 3
-							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
-						}
+					// turn: cpu
+					if (!lastHistoryItem.firstPlayerTurn && lastHistoryItem.number > 1) {
+						// evaluate to true if the variable is divisible by 3
+						this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
 					}
-				});
-		}
+				}
+			});
 	};
 
 	/**
