@@ -18,9 +18,9 @@ class Game extends Component {
 		gameRefKey: null,
 		gameLogsRef: firebase.database().ref('logs'),
 		history: [],
-		firstPlayerTurn: true,
-		secondPlayerTurn: false,
 		allowedNumber: null,
+		firstPlayer: false,
+		secondPlayer: false,
 		timer: 0
 	};
 
@@ -41,7 +41,7 @@ class Game extends Component {
 	}
 
 	render() {
-		const { history, firstPlayerTurn, allowedNumber, timer, secondPlayerTurn } = this.state;
+		const { history, allowedNumber, timer, firstPlayer, secondPlayer } = this.state;
 		const { gameState } = this.props;
 
 		return (
@@ -49,22 +49,21 @@ class Game extends Component {
 				{/* Alert */}
 				<GameAlert
 					gameState={gameState}
-					firstPlayerTurn={firstPlayerTurn}
 					timer={timer}
 				/>
 
 				{/* Moves */}
 				<GameMoves
-					gameType={gameState.type}
+					gameState={gameState}
 					history={history}
 					myRef={this.myRef}
 				/>
 
 				{/* Buttons */}
 				<GameButtons
+					firstPlayer={firstPlayer}
+					secondPlayer={secondPlayer}
 					history={history}
-					firstPlayerTurn={firstPlayerTurn}
-					secondPlayerTurn={secondPlayerTurn}
 					allowedNumber={allowedNumber}
 					addNextMove={this.addNextMove}
 				/>
@@ -93,15 +92,18 @@ class Game extends Component {
 
 						// set state
 						this.setState({
-							firstPlayerTurn: snapshots[0].history[0].firstPlayerTurn,
-							secondPlayerTurn: true,
 							gameRefKey: snapshots[0].history[0].gameRefKey,
 							history: snapshots[0].history,
+							secondPlayer: true,
 							allowedNumber
 						});
 					} else {
-						// init game
-						this.initGame();
+						this.setState({
+							firstPlayer: true
+						}, () => {
+							// init game
+							this.initGame();
+						});
 					}
 				})
 				.then();
@@ -126,21 +128,21 @@ class Game extends Component {
 	 * @param action
 	 */
 	updateGame = (value, action = '') => {
-		const { gameRef, firstPlayerTurn, history, gameRefKey } = this.state;
+		const { gameRef, history, gameRefKey } = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
 		const dataPayload = {
+			gameRefKey: gameRefKey,
 			number: value,
 			action,
-			firstPlayerTurn: !firstPlayerTurn,
-			gameRefKey: gameRefKey
+			allowedNumber,
+			turn: !(history && history.length % 2 === 0)
 		};
 		const updateHistory = history.concat(dataPayload);
 
 		// set state
 		this.setState({
 			history: updateHistory,
-			firstPlayerTurn: !firstPlayerTurn,
 			allowedNumber
 		}, () => {
 			// update game state to redux
@@ -162,10 +164,7 @@ class Game extends Component {
 							.child(gameState.type)
 							.child(gameRefKey)
 							.update({ history: history.concat(updateHistory) })
-							.then(() => {
-								// restart timer
-								this.restartTimer();
-							});
+							.then();
 					}
 
 					// add firebase real-time listener
@@ -177,8 +176,8 @@ class Game extends Component {
 					.child(gameRefKey)
 					.update({ history: updateHistory })
 					.then(() => {
-						// restart timer
-						this.restartTimer();
+						// add firebase real-time listener
+						this.addFirebaseRealTimeListener();
 					});
 			}
 
@@ -200,7 +199,7 @@ class Game extends Component {
 	 * end game
 	 */
 	endGame = () => {
-		const { firstPlayerTurn } = this.state;
+		const { history } = this.state;
 
 		// timeout added to delay the route and show the final move on the screen.
 		// usually I don't recommend using setTimeout in a project.
@@ -208,7 +207,7 @@ class Game extends Component {
 			this.props.history.push({
 				pathname: ENV.ROUTING.HOME,
 				state: {
-					result: !firstPlayerTurn
+					result: history && history.length % 2 === 0
 				}
 			});
 
@@ -235,21 +234,22 @@ class Game extends Component {
 
 					// turn: cpu
 					if (gameState.type === 'cpu') {
-						if (!lastHistoryItem.firstPlayerTurn && lastHistoryItem.number > 1) {
+						if (data.history && !(data.history.length % 2 === 0) && lastHistoryItem.number > 1) {
 							// evaluate to true if the variable is divisible by 3
 							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
+
+							// restart timer
+							this.restartTimer();
 						}
 					} else {
 						// set state
 						this.setState({
-							firstPlayerTurn: !lastHistoryItem.firstPlayerTurn,
-							gameRefKey: lastHistoryItem.gameRefKey,
 							history: data.history,
 							allowedNumber: lastHistoryItem.allowedNumber,
+						}, () => {
+							// restart timer
+							this.restartTimer();
 						});
-
-						// restart timer
-						this.restartTimer();
 					}
 				}
 			});
@@ -332,7 +332,7 @@ class Game extends Component {
 	 * log game state
 	 */
 	logGameState = () => {
-		const { gameRef, gameRefKey, gameLogsRef, firstPlayerTurn, history } = this.state;
+		const { gameRef, gameRefKey, gameLogsRef, history } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].number === 1;
 
@@ -340,7 +340,7 @@ class Game extends Component {
 		const logPayload = {
 			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player vs Player',
 			status: isFinished ? 'Finished' : 'Interrupted',
-			winner: firstPlayerTurn ? 'CPU' : 'Player',
+			winner: history && history.length % 2 === 0 ? 'CPU' : 'Player',
 			timestamp: Date.now()
 		};
 

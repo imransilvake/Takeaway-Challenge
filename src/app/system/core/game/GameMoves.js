@@ -7,11 +7,11 @@ import Player2Image from '../../../../assets/images/player2.png';
 import CPUImage from '../../../../assets/images/cpu.png';
 
 const GameMoves = (props) => {
-	let opponentImage = CPUImage;
-	const { history, gameType, myRef } = props;
+	const { history, gameState, myRef } = props;
 
 	// choose player Image
-	if (gameType !== 'cpu') {
+	let opponentImage = CPUImage;
+	if (gameState.type !== 'cpu') {
 		opponentImage = Player2Image;
 	}
 
@@ -19,8 +19,8 @@ const GameMoves = (props) => {
 		<section className="tc-game-moves">
 			{
 				history && history.length && history.map((item, i) => (
-					<div key={i} className={!item.firstPlayerTurn ? 'tc-user' : 'tc-user tc-opponent'}>
-						<img className="tc-avatar" src={!item.firstPlayerTurn ? PlayerImage : opponentImage} alt={gameType}/>
+					<div key={i} className={!item.turn ? 'tc-user' : 'tc-user tc-opponent'}>
+						<img className="tc-avatar" src={!item.turn ? PlayerImage : opponentImage} alt={gameState.type}/>
 						<div className="tc-desc">
 							{item.action && (<h5>{item.action}</h5>)}
 							{
