@@ -6,12 +6,11 @@ import Button from '@material-ui/core/Button';
 
 const GameButtons = (props) => {
 	const { history, firstPlayer, secondPlayer } = props;
-	const isEnd = history && history.length > 0 && history[history.length -1].number === 1;
-	const allowedNumber = history && history.length > 0 && history[history.length -1].allowedNumber;
+	const historyData = history && history.length > 0 && history[history.length - 1];
+	const { allowedNumber } = historyData;
 	const even = history && history.length % 2 === 0;
 	const odd = !(history && history.length % 2 === 0);
-
-	console.log((!odd && !firstPlayer) );
+	const isEnd = historyData.number === 1;
 
 	return (
 		<section className="tc-game-buttons">

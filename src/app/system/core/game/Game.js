@@ -118,7 +118,7 @@ class Game extends Component {
 		const randomNumber = Math.floor(Math.random() * 5000) + 100;
 
 		// update game
-		this.updateGame(randomNumber);
+		this.updateGame(randomNumber, '-1');
 	};
 
 	/**
@@ -127,13 +127,13 @@ class Game extends Component {
 	 * @param value
 	 * @param action
 	 */
-	updateGame = (value, action = '') => {
+	updateGame = (value, action) => {
 		const { gameRef, history, gameRefKey } = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
 		const dataPayload = {
-			gameRefKey: gameRefKey,
 			number: value,
+			gameRefKey,
 			action,
 			allowedNumber,
 			turn: !(history && history.length % 2 === 0)
@@ -151,18 +151,18 @@ class Game extends Component {
 			// random turn: first push to database
 			if (!gameRefKey) {
 				// update to firebase real-time database
-				const gameRefKey = gameRef
+				const newGameRefKey = gameRef
 					.child(gameState.type)
 					.push({ history: updateHistory })
 					.key;
 
 				// set state
-				this.setState({ gameRefKey: gameRefKey }, () => {
-					if (gameRefKey) {
-						dataPayload.gameRefKey = gameRefKey;
+				this.setState({ gameRefKey: newGameRefKey }, () => {
+					if (newGameRefKey) {
+						dataPayload.gameRefKey = newGameRefKey;
 						gameRef
 							.child(gameState.type)
-							.child(gameRefKey)
+							.child(newGameRefKey)
 							.update({ history: history.concat(updateHistory) })
 							.then();
 					}
@@ -180,18 +180,6 @@ class Game extends Component {
 						this.addFirebaseRealTimeListener();
 					});
 			}
-
-			// scroll element to end
-			this.myRef.current.scrollIntoView({
-				behavior: 'smooth',
-				block: 'center'
-			});
-
-			// if number reaches 1, we need to finish the game and declare the winner.
-			if (value === 1) {
-				// end game
-				this.endGame();
-			}
 		});
 	};
 
@@ -199,16 +187,22 @@ class Game extends Component {
 	 * end game
 	 */
 	endGame = () => {
-		const { history } = this.state;
+		const { history, firstPlayer } = this.state;
+
+		// validate result
+		let result = false;
+		if (firstPlayer) {
+			result = !(history && history.length % 2 === 0);
+		} else {
+			result = (history && history.length % 2 === 0);
+		}
 
 		// timeout added to delay the route and show the final move on the screen.
 		// usually I don't recommend using setTimeout in a project.
 		setTimeout(() => {
 			this.props.history.push({
 				pathname: ENV.ROUTING.HOME,
-				state: {
-					result: history && history.length % 2 === 0
-				}
+				state: { result }
 			});
 
 			// update game state to redux
@@ -230,7 +224,7 @@ class Game extends Component {
 			.on('value', (snap) => {
 				if (snap.exists()) {
 					const data = snap.val();
-					const lastHistoryItem = data.history[data.history.length-1];
+					const lastHistoryItem = data.history[data.history.length - 1];
 
 					// turn: cpu
 					if (gameState.type === 'cpu') {
@@ -243,12 +237,18 @@ class Game extends Component {
 						}
 					} else {
 						// set state
-						this.setState({
-							history: data.history,
-							allowedNumber: lastHistoryItem.allowedNumber,
-						}, () => {
-							// restart timer
-							this.restartTimer();
+						this.setState({ history: data.history }, () => {
+							// scroll element to end
+							this.myRef.current.scrollIntoView({
+								behavior: 'smooth',
+								block: 'center'
+							});
+
+							// if number reaches 1, we need to finish the game and declare the winner.
+							if (lastHistoryItem.number === 1) {
+								// end game
+								this.endGame();
+							}
 						});
 					}
 				}
@@ -336,11 +336,19 @@ class Game extends Component {
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].number === 1;
 
+		// set player name
+		let user1 = 'CPU';
+		let user2 = 'Player';
+		if (gameState.type !== 'cpu') {
+			user1 = 'Player 2';
+			user2 = 'Player 1';
+		}
+
 		// payload
 		const logPayload = {
-			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player vs Player',
+			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player1 vs Player2',
 			status: isFinished ? 'Finished' : 'Interrupted',
-			winner: history && history.length % 2 === 0 ? 'CPU' : 'Player',
+			winner: history && history.length % 2 === 0 ? user1 : user2,
 			timestamp: Date.now()
 		};
 

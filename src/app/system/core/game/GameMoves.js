@@ -9,7 +9,7 @@ import CPUImage from '../../../../assets/images/cpu.png';
 const GameMoves = (props) => {
 	const { history, gameState, myRef } = props;
 
-	// choose player Image
+	// set opponent Image
 	let opponentImage = CPUImage;
 	if (gameState.type !== 'cpu') {
 		opponentImage = Player2Image;
@@ -22,9 +22,9 @@ const GameMoves = (props) => {
 					<div key={i} className={!item.turn ? 'tc-user' : 'tc-user tc-opponent'}>
 						<img className="tc-avatar" src={!item.turn ? PlayerImage : opponentImage} alt={gameState.type}/>
 						<div className="tc-desc">
-							{item.action && (<h5>{item.action}</h5>)}
+							{i !== 0 && (<h5>{item.action}</h5>)}
 							{
-								item.action && (
+								i !== 0 && (
 									<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>
 								)
 							}

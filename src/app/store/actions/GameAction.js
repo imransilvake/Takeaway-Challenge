@@ -23,4 +23,3 @@ export const exitGame = () => {
 		type: actionTypes.EXIT_GAME
 	};
 };
-
