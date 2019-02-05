@@ -90,6 +90,9 @@ class Game extends Component {
 						const snapshots = Object.values(snaps.val());
 						const allowedNumber = this.validateNumberForNextMove(snapshots[0].history[0].number);
 
+						// update game state to redux
+						this.props.updateGame(snapshots[0].history[0].number);
+
 						// set state
 						this.setState({
 							gameRefKey: snapshots[0].history[0].gameRefKey,
@@ -135,8 +138,7 @@ class Game extends Component {
 			number: value,
 			gameRefKey,
 			action,
-			allowedNumber,
-			turn: !(history && history.length % 2 === 0)
+			allowedNumber
 		};
 		const updateHistory = history.concat(dataPayload);
 
@@ -145,9 +147,6 @@ class Game extends Component {
 			history: updateHistory,
 			allowedNumber
 		}, () => {
-			// update game state to redux
-			this.props.updateGame(value);
-
 			// random turn: first push to database
 			if (!gameRefKey) {
 				// update to firebase real-time database
@@ -225,6 +224,9 @@ class Game extends Component {
 				if (snap.exists()) {
 					const data = snap.val();
 					const lastHistoryItem = data.history[data.history.length - 1];
+
+					// update game state to redux
+					this.props.updateGame(lastHistoryItem.number);
 
 					// turn: cpu
 					if (gameState.type === 'cpu') {
