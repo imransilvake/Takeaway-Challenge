@@ -10,7 +10,7 @@ import ENV from '../../../../environment';
 import GameAlert from './GameAlert';
 import GameMoves from './GameMoves';
 import GameButtons from './GameButtons';
-import { exitGame, updateGame } from '../../../store/actions/GameAction';
+import { exitGame } from '../../../store/actions/GameAction';
 
 class Game extends Component {
 	state = {
@@ -25,8 +25,8 @@ class Game extends Component {
 	};
 
 	componentDidMount() {
-		// setup game
-		this.setupGame();
+		// validate game players
+		this.validateGamePlayers();
 
 		// create element ref
 		this.myRef = React.createRef();
@@ -72,9 +72,9 @@ class Game extends Component {
 	}
 
 	/**
-	 * setup game
+	 * validate game players
 	 */
-	setupGame = () => {
+	validateGamePlayers = () => {
 		const { gameRef } = this.state;
 		const { gameState } = this.props;
 
@@ -90,9 +90,6 @@ class Game extends Component {
 						const snapshots = Object.values(snaps.val());
 						const allowedNumber = this.validateNumberForNextMove(snapshots[0].history[0].number);
 
-						// update game state to redux
-						this.props.updateGame(snapshots[0].history[0].number);
-
 						// set state
 						this.setState({
 							gameRefKey: snapshots[0].history[0].gameRefKey,
@@ -101,9 +98,7 @@ class Game extends Component {
 							allowedNumber
 						});
 					} else {
-						this.setState({
-							firstPlayer: true
-						}, () => {
+						this.setState({ firstPlayer: true }, () => {
 							// init game
 							this.initGame();
 						});
@@ -224,9 +219,6 @@ class Game extends Component {
 				if (snap.exists()) {
 					const data = snap.val();
 					const lastHistoryItem = data.history[data.history.length - 1];
-
-					// update game state to redux
-					this.props.updateGame(lastHistoryItem.number);
 
 					// turn: cpu
 					if (gameState.type === 'cpu') {
@@ -372,4 +364,4 @@ class Game extends Component {
 	};
 }
 
-export default connect(null, { updateGame, exitGame })(Game);
+export default connect(null, { exitGame })(Game);

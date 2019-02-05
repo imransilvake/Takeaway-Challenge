@@ -9,14 +9,6 @@ export const startGame = (type) => {
 	};
 };
 
-// update game
-export const updateGame = (value) => {
-	return {
-		type: actionTypes.UPDATE_GAME,
-		payload: value
-	};
-};
-
 // exit game
 export const exitGame = () => {
 	return {

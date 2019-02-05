@@ -17,11 +17,6 @@ const gameReducer = (state = initGameState, action) => {
 				start: true,
 				type: action.payload
 			};
-		case actionTypes.UPDATE_GAME:
-			return {
-				...state,
-				value: action.payload
-			};
 		case actionTypes.EXIT_GAME:
 			return {
 				...state,
