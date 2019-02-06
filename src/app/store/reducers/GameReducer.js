@@ -4,8 +4,7 @@ import * as actionTypes from '../actions/ActionTypes';
 // init game state
 const initGameState = {
 	start: false,
-	type: '',
-	value: 0
+	type: ''
 };
 
 // reducer: Game

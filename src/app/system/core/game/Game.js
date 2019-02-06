@@ -19,7 +19,7 @@ class Game extends Component {
 		gameLogsRef: firebase.database().ref('logs'),
 		history: [],
 		allowedNumber: null,
-		firstPlayer: false,
+		firstPlayer: true,
 		secondPlayer: false,
 		timer: 0
 	};
@@ -61,6 +61,7 @@ class Game extends Component {
 
 				{/* Buttons */}
 				<GameButtons
+					gameState={gameState}
 					firstPlayer={firstPlayer}
 					secondPlayer={secondPlayer}
 					history={history}
@@ -94,14 +95,13 @@ class Game extends Component {
 						this.setState({
 							gameRefKey: snapshots[0].history[0].gameRefKey,
 							history: snapshots[0].history,
+							firstPlayer: false,
 							secondPlayer: true,
 							allowedNumber
 						});
 					} else {
-						this.setState({ firstPlayer: true }, () => {
-							// init game
-							this.initGame();
-						});
+						// init game
+						this.initGame();
 					}
 				})
 				.then();
@@ -144,7 +144,7 @@ class Game extends Component {
 		}, () => {
 			// random turn: first push to database
 			if (!gameRefKey) {
-				// update to firebase real-time database
+				// push
 				const newGameRefKey = gameRef
 					.child(gameState.type)
 					.push({ history: updateHistory })
@@ -172,6 +172,9 @@ class Game extends Component {
 					.then(() => {
 						// add firebase real-time listener
 						this.addFirebaseRealTimeListener();
+
+						// validate game state
+						this.validateGameState(value);
 					});
 			}
 		});
@@ -186,9 +189,9 @@ class Game extends Component {
 		// validate result
 		let result = false;
 		if (firstPlayer) {
-			result = !(history && history.length % 2 === 0);
+			result = history && history.length % 2 !== 0;
 		} else {
-			result = (history && history.length % 2 === 0);
+			result = history && history.length % 2 === 0;
 		}
 
 		// timeout added to delay the route and show the final move on the screen.
@@ -211,7 +214,6 @@ class Game extends Component {
 		const { gameRef, gameRefKey } = this.state;
 		const { gameState } = this.props;
 
-		// real-time database live listener
 		gameRef
 			.child(gameState.type)
 			.child(gameRefKey)
@@ -230,19 +232,9 @@ class Game extends Component {
 							this.restartTimer();
 						}
 					} else {
-						// set state
 						this.setState({ history: data.history }, () => {
-							// scroll element to end
-							this.myRef.current.scrollIntoView({
-								behavior: 'smooth',
-								block: 'center'
-							});
-
-							// if number reaches 1, we need to finish the game and declare the winner.
-							if (lastHistoryItem.number === 1) {
-								// end game
-								this.endGame();
-							}
+							// validate game state
+							this.validateGameState(lastHistoryItem.number);
 						});
 					}
 				}
@@ -279,6 +271,25 @@ class Game extends Component {
 
 		// update game
 		this.updateGame(value, action);
+	};
+
+	/**
+	 * validate game state
+	 *
+	 * @param number
+	 */
+	validateGameState = (number) => {
+		// scroll element to end
+		this.myRef.current.scrollIntoView({
+			behavior: 'smooth',
+			block: 'center'
+		});
+
+		// if number reaches 1, we need to finish the game and declare the winner.
+		if (number === 1) {
+			// end game
+			this.endGame();
+		}
 	};
 
 	/**
