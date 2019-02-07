@@ -11,6 +11,7 @@ import GameAlert from './GameAlert';
 import GameMoves from './GameMoves';
 import GameButtons from './GameButtons';
 import { exitGame } from '../../../store/actions/GameAction';
+import isEven from '../../utilities/helpers/Helpers';
 
 class Game extends Component {
 	state = {
@@ -18,7 +19,6 @@ class Game extends Component {
 		gameRefKey: null,
 		gameLogsRef: firebase.database().ref('logs'),
 		history: [],
-		allowedNumber: null,
 		firstPlayer: true,
 		secondPlayer: false
 	};
@@ -32,27 +32,43 @@ class Game extends Component {
 	}
 
 	componentDidMount() {
-		// validate game players
-		this.validateGamePlayers();
+		// detect online status
+		if (!navigator.onLine) {
+			this.props.history.push({
+				pathname: ENV.ROUTING.HOME
+			});
+		}
+
+		// validate players
+		this.validatePlayers();
 	}
 
 	componentWillUnmount() {
+		// detect online status
+		if (!navigator.onLine) {
+			return;
+		}
+
 		// before exit, log the result
 		this.logGameResult();
 	}
 
 	render() {
-		const { history, allowedNumber, firstPlayer, secondPlayer } = this.state;
+		const { history, firstPlayer, secondPlayer } = this.state;
 		const { gameState } = this.props;
+		const even = history && isEven(history.length);
+		const odd = history && !isEven(history.length);
 
 		return (
 			<section className="tc-game tc-view-height">
 				{/* Alert */}
 				<GameAlert
 					gameState={gameState}
-					firstPlayer={firstPlayer}
 					history={history}
+					firstPlayer={firstPlayer}
 					secondPlayer={secondPlayer}
+					even={even}
+					odd={odd}
 					endGame={this.endGame}
 					ref={this.timerRef}
 				/>
@@ -67,10 +83,11 @@ class Game extends Component {
 				{/* Buttons */}
 				<GameButtons
 					gameState={gameState}
+					history={history}
 					firstPlayer={firstPlayer}
 					secondPlayer={secondPlayer}
-					history={history}
-					allowedNumber={allowedNumber}
+					even={even}
+					odd={odd}
 					addNextMove={this.addNextMove}
 				/>
 			</section>
@@ -78,15 +95,14 @@ class Game extends Component {
 	}
 
 	/**
-	 * validate game players
+	 * validate players
 	 */
-	validateGamePlayers = () => {
+	validatePlayers = () => {
 		const { gameRef } = this.state;
 		const { gameState } = this.props;
 
 		// cpu
 		if (gameState.type === 'cpu') {
-			// init game
 			this.initGame();
 		} else {
 			gameRef
@@ -94,21 +110,17 @@ class Game extends Component {
 				.once('value', (snaps) => {
 					if (snaps.exists()) {
 						const snapshots = Object.values(snaps.val());
-						const allowedNumber = this.validateNumberForNextMove(snapshots[0].history[0].number);
 
 						// set state
 						this.setState({
 							gameRefKey: snapshots[0].history[0].gameRefKey,
 							history: snapshots[0].history,
 							firstPlayer: false,
-							secondPlayer: true,
-							allowedNumber
+							secondPlayer: true
 						}, () => {
-							// restart timer
 							this.timerRef.current.restartTimer();
 						});
 					} else {
-						// init game
 						this.initGame();
 					}
 				})
@@ -124,29 +136,27 @@ class Game extends Component {
 		const randomNumber = Math.floor(Math.random() * 5000) + 100;
 
 		// update game
-		this.updateGame(randomNumber, '-2');
+		this.updateGame(randomNumber);
 	};
 
 	/**
 	 * update game state: firebase and redux
 	 *
 	 * @param value
-	 * @param action
 	 */
-	updateGame = (value, action) => {
+	updateGame = (value) => {
 		const { gameRef, history, gameRefKey } = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
 		const dataPayload = {
-			number: value,
+			value,
 			gameRefKey,
-			action,
 			allowedNumber
 		};
 		const updateHistory = history.concat(dataPayload);
 
 		// set state
-		this.setState({ history: updateHistory, allowedNumber }, () => {
+		this.setState({ history: updateHistory }, () => {
 			// random turn: first push to database
 			if (!gameRefKey) {
 				// push
@@ -202,14 +212,14 @@ class Game extends Component {
 
 					// turn: cpu
 					if (gameState.type === 'cpu') {
-						if (data.history && !(data.history.length % 2 === 0) && lastHistoryItem.number > 1) {
+						if (data.history && !isEven(data.history.length) && lastHistoryItem.value > 1) {
 							// evaluate to true if the variable is divisible by 3
-							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
+							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.value));
 						}
 					} else {
 						this.setState({ history: data.history }, () => {
 							// validate game state
-							this.validateGameState(lastHistoryItem.number);
+							this.validateGameState(lastHistoryItem.value);
 						});
 					}
 
@@ -245,10 +255,10 @@ class Game extends Component {
 	addNextMove = (action) => {
 		const { history } = this.state;
 		const oldValue = history[history.length - 1];
-		const value = (oldValue.number + (Number(action))) / 3;
+		const value = (oldValue.value + (Number(action))) / 3;
 
 		// update game
-		this.updateGame(value, action);
+		this.updateGame(value);
 	};
 
 	/**
@@ -279,9 +289,9 @@ class Game extends Component {
 		// validate result
 		let result = false;
 		if (firstPlayer) {
-			result = history && history.length % 2 !== 0;
+			result = history && !isEven(history.length);
 		} else {
-			result = history && history.length % 2 === 0;
+			result = history && isEven(history.length);
 		}
 
 		// timeout added to delay the route and show the final move on the screen.
@@ -303,7 +313,7 @@ class Game extends Component {
 	logGameResult = () => {
 		const { gameRef, gameRefKey, gameLogsRef, history } = this.state;
 		const { gameState } = this.props;
-		const isFinished = history && history[history.length - 1].number === 1;
+		const isFinished = history && history[history.length - 1].value === 1;
 
 		// set player names
 		let user1 = 'CPU';
@@ -317,7 +327,7 @@ class Game extends Component {
 		const logPayload = {
 			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player1 vs Player2',
 			status: isFinished ? 'Finished' : 'Interrupted',
-			winner: history && history.length % 2 === 0 ? user1 : user2,
+			winner: history && isEven(history.length) ? user1 : user2,
 			timestamp: Date.now()
 		};
 

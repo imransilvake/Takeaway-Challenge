@@ -16,9 +16,7 @@ class GameAlert extends Component {
 
 	render() {
 		const { timer } = this.state;
-		const { gameState, history, firstPlayer, secondPlayer } = this.props;
-		const even = history && history.length % 2 === 0;
-		const odd = !(history && history.length % 2 === 0);
+		const { gameState, firstPlayer, secondPlayer, even, odd } = this.props;
 
 		// set turn based on game mode
 		let turn = odd;
@@ -37,7 +35,7 @@ class GameAlert extends Component {
 				<p>{i18n.t('GAME.ALERT', { name: !turn ? 'Your' : opponentName, time: timer })}</p>
 			</section>
 		)
-	};
+	}
 
 	/**
 	 * start timer

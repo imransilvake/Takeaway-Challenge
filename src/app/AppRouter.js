@@ -18,9 +18,10 @@ class AppRouter extends Component {
 				<Route exact path={ENV.ROUTING.HOME} component={Home}/>
 				<Route exact path={ENV.ROUTING.LOGS} component={Logs}/>
 				<Route
-					path={ENV.ROUTING.HOME} render={props => (
-						this.props.gameState.start ?
-							(<Game {...props} gameState={this.props.gameState} />) : (<Redirect to={ENV.ROUTING.HOME}/>)
+					path={ENV.ROUTING.HOME}
+					render={props => (
+						this.props.gameState.start
+							? (<Game {...props} gameState={this.props.gameState}/>) : (<Redirect to={ENV.ROUTING.HOME}/>)
 					)}/>
 			</Switch>
 		);

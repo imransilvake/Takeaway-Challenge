@@ -1,5 +1,4 @@
 {
-	"404": "404 Error",
 	"HOME": {
 		"TITLE": "Takeaway Challenge",
 		"SUBTITLE": "Choose your opponent!",
@@ -11,11 +10,11 @@
 		"RESULT": {
 			"WINNER": {
 				"TITLE": "You Win!",
-				"SUBTITLE": "Congratulations ;)"
+				"SUBTITLE": "Congratulations :)"
 			},
 			"LOSER": {
 				"TITLE": "You Lost!",
-				"SUBTITLE": "Better Luck Next Time :("
+				"SUBTITLE": "Better Luck Next Time!"
 			}
 		},
 		"ADDITION": {
