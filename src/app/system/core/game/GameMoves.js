@@ -7,7 +7,7 @@ import Player2Image from '../../../../assets/images/player2.png';
 import CPUImage from '../../../../assets/images/cpu.png';
 
 const GameMoves = (props) => {
-	const { history, gameState, myRef } = props;
+	const { history, gameState, scrollRef } = props;
 
 	// set opponent Image
 	let opponentImage = CPUImage;
@@ -28,7 +28,7 @@ const GameMoves = (props) => {
 									<p>[({item.action} + {history[i - 1] && history[i - 1].number}) / 3] = {item.number}</p>
 								)
 							}
-							<p ref={history.length - 1 === i ? myRef : null}>{item.number}</p>
+							<p ref={history.length - 1 === i ? scrollRef : null}>{item.number}</p>
 						</div>
 					</div>
 				))

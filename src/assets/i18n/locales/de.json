@@ -24,7 +24,7 @@
 		}
 	},
 	"GAME": {
-		"ALERT": "{{ type }} Zug endet in {{ time }} Sekunden."
+		"ALERT": "{{ name }} Zug endet in {{ time }} Sekunden."
 	},
 	"LOGS": {
 		"EMPTY": "Leeres Protokoll",

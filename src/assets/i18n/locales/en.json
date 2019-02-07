@@ -24,7 +24,7 @@
 		}
 	},
 	"GAME": {
-		"ALERT": "{{ type }} turn end in {{ time }} seconds."
+		"ALERT": "{{ name }} turn end in {{ time }} seconds."
 	},
 	"LOGS": {
 		"EMPTY": "Empty Log",

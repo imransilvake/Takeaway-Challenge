@@ -20,28 +20,29 @@ class Game extends Component {
 		history: [],
 		allowedNumber: null,
 		firstPlayer: true,
-		secondPlayer: false,
-		timer: 0
+		secondPlayer: false
 	};
+
+	constructor(props) {
+		super(props);
+
+		// create element ref
+		this.scrollRef = React.createRef();
+		this.timerRef = React.createRef();
+	}
 
 	componentDidMount() {
 		// validate game players
 		this.validateGamePlayers();
-
-		// create element ref
-		this.myRef = React.createRef();
 	}
 
 	componentWillUnmount() {
-		// log game state
-		this.logGameState();
-
-		// clear timer
-		this.clearTimer(this.timer);
+		// before exit, log the result
+		this.logGameResult();
 	}
 
 	render() {
-		const { history, allowedNumber, timer, firstPlayer, secondPlayer } = this.state;
+		const { history, allowedNumber, firstPlayer, secondPlayer } = this.state;
 		const { gameState } = this.props;
 
 		return (
@@ -49,14 +50,18 @@ class Game extends Component {
 				{/* Alert */}
 				<GameAlert
 					gameState={gameState}
-					timer={timer}
+					firstPlayer={firstPlayer}
+					history={history}
+					secondPlayer={secondPlayer}
+					endGame={this.endGame}
+					ref={this.timerRef}
 				/>
 
 				{/* Moves */}
 				<GameMoves
 					gameState={gameState}
 					history={history}
-					myRef={this.myRef}
+					scrollRef={this.scrollRef}
 				/>
 
 				{/* Buttons */}
@@ -98,6 +103,9 @@ class Game extends Component {
 							firstPlayer: false,
 							secondPlayer: true,
 							allowedNumber
+						}, () => {
+							// restart timer
+							this.timerRef.current.restartTimer();
 						});
 					} else {
 						// init game
@@ -116,7 +124,7 @@ class Game extends Component {
 		const randomNumber = Math.floor(Math.random() * 5000) + 100;
 
 		// update game
-		this.updateGame(randomNumber, '-1');
+		this.updateGame(randomNumber, '-2');
 	};
 
 	/**
@@ -138,10 +146,7 @@ class Game extends Component {
 		const updateHistory = history.concat(dataPayload);
 
 		// set state
-		this.setState({
-			history: updateHistory,
-			allowedNumber
-		}, () => {
+		this.setState({ history: updateHistory, allowedNumber }, () => {
 			// random turn: first push to database
 			if (!gameRefKey) {
 				// push
@@ -181,33 +186,6 @@ class Game extends Component {
 	};
 
 	/**
-	 * end game
-	 */
-	endGame = () => {
-		const { history, firstPlayer } = this.state;
-
-		// validate result
-		let result = false;
-		if (firstPlayer) {
-			result = history && history.length % 2 !== 0;
-		} else {
-			result = history && history.length % 2 === 0;
-		}
-
-		// timeout added to delay the route and show the final move on the screen.
-		// usually I don't recommend using setTimeout in a project.
-		setTimeout(() => {
-			this.props.history.push({
-				pathname: ENV.ROUTING.HOME,
-				state: { result }
-			});
-
-			// update game state to redux
-			this.props.exitGame();
-		}, 1000);
-	};
-
-	/**
 	 * add firebase real-time listener
 	 */
 	addFirebaseRealTimeListener = () => {
@@ -227,9 +205,6 @@ class Game extends Component {
 						if (data.history && !(data.history.length % 2 === 0) && lastHistoryItem.number > 1) {
 							// evaluate to true if the variable is divisible by 3
 							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.number));
-
-							// restart timer
-							this.restartTimer();
 						}
 					} else {
 						this.setState({ history: data.history }, () => {
@@ -237,6 +212,9 @@ class Game extends Component {
 							this.validateGameState(lastHistoryItem.number);
 						});
 					}
+
+					// restart timer
+					this.timerRef.current.restartTimer();
 				}
 			});
 	};
@@ -280,7 +258,7 @@ class Game extends Component {
 	 */
 	validateGameState = (number) => {
 		// scroll element to end
-		this.myRef.current.scrollIntoView({
+		this.scrollRef.current.scrollIntoView({
 			behavior: 'smooth',
 			block: 'center'
 		});
@@ -293,55 +271,41 @@ class Game extends Component {
 	};
 
 	/**
-	 * start timer
+	 * end game
 	 */
-	startTimer = () => {
-		const startTime = Date.now();
-		this.timer = setInterval(() => {
-			const seconds = Math.round((Date.now() - startTime) / 1000);
+	endGame = () => {
+		const { history, firstPlayer } = this.state;
 
-			// set timer
-			this.setState({ timer: seconds });
+		// validate result
+		let result = false;
+		if (firstPlayer) {
+			result = history && history.length % 2 !== 0;
+		} else {
+			result = history && history.length % 2 === 0;
+		}
 
-			// validate user status
-			if (seconds === 300) {
-				// clear timer
-				this.clearTimer(this.timer);
+		// timeout added to delay the route and show the final move on the screen.
+		// usually I don't recommend using setTimeout in a project.
+		setTimeout(() => {
+			this.props.history.push({
+				pathname: ENV.ROUTING.HOME,
+				state: { result }
+			});
 
-				// end game
-				this.endGame();
-			}
+			// update game state to redux
+			this.props.exitGame();
 		}, 1000);
 	};
 
 	/**
-	 * restart timer
+	 * log game result
 	 */
-	restartTimer = () => {
-		// clear timer
-		this.clearTimer(this.timer);
-
-		// start timer
-		this.startTimer();
-	};
-
-	/**
-	 * clear timer
-	 */
-	clearTimer = (timer) => {
-		// clear interval
-		clearInterval(timer);
-	};
-
-	/**
-	 * log game state
-	 */
-	logGameState = () => {
+	logGameResult = () => {
 		const { gameRef, gameRefKey, gameLogsRef, history } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].number === 1;
 
-		// set player name
+		// set player names
 		let user1 = 'CPU';
 		let user2 = 'Player';
 		if (gameState.type !== 'cpu') {
@@ -357,17 +321,16 @@ class Game extends Component {
 			timestamp: Date.now()
 		};
 
-		// update log to firebase real-time database
+		// empty data from firebase database
+		// remove live listeners
 		gameLogsRef
 			.push(logPayload)
 			.then(() => {
-				// empty data from firebase
 				gameRef
 					.child(gameState.type)
 					.child(gameRefKey)
 					.remove()
 					.then(() => {
-						// remove live listeners
 						gameRef.child(gameState.type).off();
 						gameLogsRef.off();
 					});
