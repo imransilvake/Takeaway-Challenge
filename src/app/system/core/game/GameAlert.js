@@ -6,7 +6,7 @@ import i18n from '../../../../assets/i18n/i18n';
 
 class GameAlert extends Component {
 	state = {
-		timer: 10
+		timer: 100
 	};
 
 	componentWillUnmount() {
@@ -18,15 +18,12 @@ class GameAlert extends Component {
 		const { timer } = this.state;
 		const { gameState, firstPlayer, secondPlayer, even, odd } = this.props;
 
-		// set turn based on game mode
-		let turn = odd;
-		if (gameState.type !== 'cpu') {
-			turn = (!odd && !firstPlayer) || (!even && !secondPlayer);
-		}
-
+		// set turn (based on game type)
 		// set player names
+		let turn = odd;
 		let opponentName = 'CPU';
 		if (gameState.type !== 'cpu') {
+			turn = (!odd && !firstPlayer) || (!even && !secondPlayer);
 			opponentName = 'Player';
 		}
 
@@ -42,7 +39,7 @@ class GameAlert extends Component {
 	 */
 	startTimer = () => {
 		const startTime = Date.now();
-		const counter = 10;
+		const counter = 100;
 		this.timer = setInterval(() => {
 			const seconds = Math.round((Date.now() - startTime) / 1000);
 

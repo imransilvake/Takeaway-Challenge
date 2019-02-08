@@ -27,7 +27,7 @@ class Header extends Component {
 			<section className="tc-header">
 				<div className="cd-row">
 					<div className="cd-col cd-col-pd-d-8 cd-col-pd-w-8 tc-logo">
-						<Link to={ENV.ROUTING.HOME}>
+						<Link to={ENV.ROUTING.HOME} className="ts-disabled">
 							<img src={Logo} alt="logo"/>
 						</Link>
 					</div>

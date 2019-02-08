@@ -16,8 +16,9 @@ import isEven from '../../utilities/helpers/Helpers';
 class Game extends Component {
 	state = {
 		gameRef: firebase.database().ref('game'),
-		gameRefKey: null,
+		gameInfoRef: firebase.database().ref('info/connected'),
 		gameLogsRef: firebase.database().ref('logs'),
+		gameRefKey: null,
 		history: [],
 		firstPlayer: true,
 		secondPlayer: false
@@ -32,6 +33,8 @@ class Game extends Component {
 	}
 
 	componentDidMount() {
+		const { gameState } = this.props;
+
 		// detect online status
 		if (!navigator.onLine) {
 			this.props.history.push({
@@ -39,18 +42,13 @@ class Game extends Component {
 			});
 		}
 
-		// validate players
-		this.validatePlayers();
-	}
-
-	componentWillUnmount() {
-		// detect online status
-		if (!navigator.onLine) {
-			return;
+		// on user disconnect with firebase
+		if (gameState.type !== 'cpu') {
+			this.onUserDisconnectWithFirebase();
 		}
 
-		// before exit, log the result
-		this.logGameResult();
+		// validate players
+		this.validatePlayers();
 	}
 
 	render() {
@@ -282,9 +280,14 @@ class Game extends Component {
 
 	/**
 	 * end game
+	 *
+	 * @param isDisconnected
 	 */
-	endGame = () => {
-		const { history, firstPlayer } = this.state;
+	endGame = (isDisconnected = false) => {
+		const { history, firstPlayer, secondPlayer } = this.state;
+
+		// log result
+		this.logGameResult(isDisconnected);
 
 		// validate result
 		let result = false;
@@ -292,6 +295,11 @@ class Game extends Component {
 			result = history && !isEven(history.length);
 		} else {
 			result = history && isEven(history.length);
+		}
+
+		// on disconnect
+		if (isDisconnected) {
+			result = firstPlayer ? firstPlayer : secondPlayer;
 		}
 
 		// timeout added to delay the route and show the final move on the screen.
@@ -309,9 +317,11 @@ class Game extends Component {
 
 	/**
 	 * log game result
+	 *
+	 * @param isDisconnected
 	 */
-	logGameResult = () => {
-		const { gameRef, gameRefKey, gameLogsRef, history } = this.state;
+	logGameResult = (isDisconnected = false) => {
+		const { gameRef, gameRefKey, gameLogsRef, history, firstPlayer } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].value === 1;
 
@@ -323,11 +333,17 @@ class Game extends Component {
 			user2 = 'Player 1';
 		}
 
+		// set winner
+		let winner = history && isEven(history.length) ? user1 : user2;
+		if (isDisconnected) {
+			winner = firstPlayer ? user2 : user1;
+		}
+
 		// payload
 		const logPayload = {
 			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player1 vs Player2',
 			status: isFinished ? 'Finished' : 'Interrupted',
-			winner: history && isEven(history.length) ? user1 : user2,
+			winner: winner,
 			timestamp: Date.now()
 		};
 
@@ -345,6 +361,34 @@ class Game extends Component {
 						gameLogsRef.off();
 					});
 			});
+	};
+
+	/**
+	 * write a string when this (current) client loses connection
+	 */
+	onUserDisconnectWithFirebase = () => {
+		const { gameInfoRef } = this.state;
+
+		// remove on init
+		gameInfoRef.remove().then();
+
+		// listener
+		gameInfoRef.on('child_added', () => {
+			// end game
+			this.endGame(true);
+
+			// off
+			gameInfoRef.off();
+
+			// remove
+			gameInfoRef.remove().then();
+		});
+
+		// on disconnect
+		gameInfoRef
+			.onDisconnect()
+			.update({value: 'Connected'})
+			.then();
 	};
 }
 

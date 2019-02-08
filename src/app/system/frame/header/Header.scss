@@ -10,9 +10,17 @@
 			&.tc-logo {
 				padding-right: 5px;
 
-				img {
-					display: block;
-					width: 130px;
+				a {
+					img {
+						display: block;
+						width: 130px;
+					}
+
+					&.ts-disabled {
+						cursor: default;
+						display: block;
+						pointer-events: none;
+					}
 				}
 			}
 
