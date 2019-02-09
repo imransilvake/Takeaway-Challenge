@@ -27,7 +27,7 @@ class Home extends Component {
 						{location.state && !location.state.result && i18n.t('HOME.RESULT.LOSER.SUBTITLE')}
 					</p>
 					{
-						location.info && location.info.busy && ( <p className="ts-busy">{i18n.t('HOME.STATUS.BUSY')}</p> )
+						location.info && location.info.busy && (<p className="ts-busy">{i18n.t('HOME.STATUS.BUSY')}</p>)
 					}
 					<div className="tc-buttons">
 						<Link to={ENV.ROUTING.GAME}>

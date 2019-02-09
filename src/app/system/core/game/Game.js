@@ -41,6 +41,10 @@ class Game extends Component {
 
 		// cpu
 		if (gameState.type === 'cpu') {
+			// display game view
+			this.setState({ gameView: true });
+
+			// init game
 			this.initGame();
 		} else {
 			// detect active game players
@@ -54,7 +58,7 @@ class Game extends Component {
 		const even = history && isEven(history.length);
 		const odd = history && !isEven(history.length);
 
-		return !gameView? <LoadingAnimation /> : (
+		return !gameView ? <LoadingAnimation /> : (
 			<section className="tc-game tc-view-height">
 				<GameAlert
 					gameState={gameState}
@@ -287,11 +291,9 @@ class Game extends Component {
 
 						// disable wait
 						this.setState({ waitingForUser: false });
-					} else {
-						// set wait
-						if (!this.state.waitingForUser) {
-							this.setState({ waitingForUser: true });
-						}
+					} else if (!this.state.waitingForUser) {
+						// enable wait
+						this.setState({ waitingForUser: true });
 					}
 				}
 			});

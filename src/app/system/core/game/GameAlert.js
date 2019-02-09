@@ -16,7 +16,7 @@ class GameAlert extends Component {
 
 	render() {
 		const { timer } = this.state;
-		const { gameState, firstPlayer, secondPlayer, even, odd, waitingForUser } = this.props;
+		const { gameState, firstPlayer, secondPlayer, even, odd, waitingForUser, history } = this.props;
 
 		// set turn (based on game type)
 		// set player names
@@ -29,9 +29,12 @@ class GameAlert extends Component {
 
 		return (
 			<section className="tc-game-alert cd-center-align">
-				{waitingForUser && firstPlayer && (<p>Please Hold on until another player starts!</p>)}
-				{waitingForUser && secondPlayer && (<p>Please make a move ;)</p>)}
-				{!waitingForUser && (<p>{i18n.t('GAME.ALERT', { name: !turn ? 'Your' : opponentName, time: timer })}</p>)}
+				{waitingForUser && firstPlayer && (<p>{i18n.t('GAME.ALERT.WAIT_FOR_MOVE')}</p>)}
+				{waitingForUser && secondPlayer && (<p>{i18n.t('GAME.ALERT.MAKE_MOVE')}</p>)}
+				{(
+					(!waitingForUser && history && history.length > 1) || gameState.type === 'cpu') && (
+					<p>{i18n.t('GAME.ALERT.TIMER_MESSAGE', { name: !turn ? 'Your' : opponentName, time: timer })}</p>
+				)}
 			</section>
 		)
 	}
