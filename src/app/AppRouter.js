@@ -9,7 +9,7 @@ import Home from './system/frame/home/Home';
 import Game from './system/core/game/Game';
 import Logs from './system/frame/logs/Logs';
 import Redirect from 'react-router-dom/es/Redirect';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 class AppRouter extends Component {
 	render() {
@@ -33,4 +33,4 @@ const mapStateToProps = state => ({
 	gameState: state.game
 });
 
-export default withNamespaces()(withRouter(connect(mapStateToProps)(AppRouter)))
+export default withTranslation()(withRouter(connect(mapStateToProps)(AppRouter)))

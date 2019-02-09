@@ -351,7 +351,7 @@ class Game extends Component {
 
 		// log result
 		if (isLogResult) {
-			this.logGameResult(isDisconnected);
+			this.logFinalResult(isDisconnected);
 		}
 
 		// validate result
@@ -364,7 +364,7 @@ class Game extends Component {
 
 		// on disconnect
 		if (isDisconnected) {
-			result = firstPlayer ? firstPlayer : secondPlayer;
+			result = firstPlayer || secondPlayer;
 		}
 
 		// timeout added to delay the route and show the final move on the screen.
@@ -381,11 +381,11 @@ class Game extends Component {
 	};
 
 	/**
-	 * log game result
+	 * log final result
 	 *
 	 * @param isDisconnected
 	 */
-	logGameResult = (isDisconnected = false) => {
+	logFinalResult = (isDisconnected = false) => {
 		const { gameRef, gameRefKey, gameLogsRef, gamePresenceRef, history, firstPlayer } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].value === 1;
@@ -408,7 +408,7 @@ class Game extends Component {
 		const logPayload = {
 			mode: gameState.type === 'cpu' ? 'CPU vs Player' : 'Player1 vs Player2',
 			status: isFinished ? 'Finished' : 'Interrupted',
-			winner: winner,
+			winner,
 			timestamp: Date.now()
 		};
 
