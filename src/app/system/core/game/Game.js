@@ -16,7 +16,8 @@ import isEven from '../../utilities/helpers/Helpers';
 class Game extends Component {
 	state = {
 		gameRef: firebase.database().ref('game'),
-		gameInfoRef: firebase.database().ref('info/connected'),
+		gameInfoRef: firebase.database().ref('.info/connected'),
+		gamePresenceRef: firebase.database().ref('presence'),
 		gameLogsRef: firebase.database().ref('logs'),
 		gameRefKey: null,
 		history: [],
@@ -33,8 +34,15 @@ class Game extends Component {
 	}
 
 	componentDidMount() {
-		// validate players
-		this.validatePlayers();
+		const { gameState } = this.props;
+
+		// cpu
+		if (gameState.type === 'cpu') {
+			this.initGame();
+		} else {
+			// detect active game players
+			this.detectActivePlayers();
+		}
 	}
 
 	render() {
@@ -79,42 +87,100 @@ class Game extends Component {
 	}
 
 	/**
-	 * validate players
+	 * detect active game players
 	 */
-	validatePlayers = () => {
-		const { gameRef } = this.state;
+	detectActivePlayers = () => {
+		const { gameRef, gameInfoRef, gamePresenceRef } = this.state;
 		const { gameState } = this.props;
+		const currentUserRef = gamePresenceRef.push();
 
-		// cpu
-		if (gameState.type === 'cpu') {
-			this.initGame();
-		} else {
-			gameRef
-				.child(gameState.type)
-				.once('value', (snaps) => {
-					if (snaps.exists()) {
-						const snapshots = Object.values(snaps.val());
+		// monitor connection state on browser tab
+		gameInfoRef
+			.on('value', (snap) => {
+				if (snap.val()) {
+					// off listener
+					gameInfoRef.off();
 
-						// set state
-						this.setState({
-							gameRefKey: snapshots[0].history[0].gameRefKey,
-							history: snapshots[0].history,
-							firstPlayer: false,
-							secondPlayer: true
-						}, () => {
-							// restart timer
-							this.timerRef.current.restartTimer();
+					// if we lose network then remove this user from the list
+					currentUserRef.onDisconnect().remove().then();
 
-							// on user disconnect with firebase
-							this.onUserDisconnectWithFirebase();
-						});
-					} else {
-						// init game
-						this.initGame();
-					}
-				})
-				.then();
-		}
+					// set user
+					currentUserRef.set(true).then();
+				}
+			});
+
+		// detect users (once)
+		gamePresenceRef
+			.once('value', (snap) => {
+				const totalUsers = snap.numChildren();
+
+				// for two players
+				if (totalUsers < 3) {
+					// on player disconnect
+					this.onPlayerDisconnect();
+				}
+
+				// validate game
+				if (totalUsers === 1) {
+					this.initGame();
+				} else if (totalUsers === 2) {
+					gameRef
+						.child(gameState.type)
+						.once('value', (snaps) => {
+							if (snaps.exists()) {
+								const snapshots = Object.values(snaps.val());
+
+								// set state
+								this.setState({
+									gameRefKey: snapshots[0].history[0].gameRefKey,
+									history: snapshots[0].history,
+									firstPlayer: false,
+									secondPlayer: true
+								}, () => {
+									// restart timer
+									this.timerRef.current.restartTimer();
+
+									// add firebase real-time listener
+									this.addFirebaseRealTimeListener();
+								});
+							}
+						})
+						.then();
+				} else {
+					// set user
+					currentUserRef.set(false).then();
+
+					// go to home
+					this.props.history.push({
+						pathname: ENV.ROUTING.HOME
+					});
+				}
+			})
+			.then();
+	};
+
+	/**
+	 * write a current player disconnect
+	 */
+	onPlayerDisconnect = () => {
+		const { gamePresenceRef } = this.state;
+
+		// when user disconnected (on)
+		gamePresenceRef
+			.once('child_removed', () => {
+				const { history } = this.state;
+				const lastHistoryItem = history[history.length - 1];
+
+				// check if game is finished or interrupted
+				if (lastHistoryItem && lastHistoryItem.value !== 1) {
+					// remove
+					gamePresenceRef.remove().then();
+
+					// end game
+					this.endGame(true);
+				}
+			})
+			.then();
 	};
 
 	/**
@@ -173,13 +239,7 @@ class Game extends Component {
 					.child(gameState.type)
 					.child(gameRefKey)
 					.update({ history: updateHistory })
-					.then(() => {
-						// add firebase real-time listener
-						this.addFirebaseRealTimeListener();
-
-						// validate game state
-						this.validateGameState(value);
-					});
+					.then();
 			}
 		});
 	};
@@ -216,9 +276,6 @@ class Game extends Component {
 					if (data && data.history.length > 1) {
 						this.timerRef.current.restartTimer();
 					}
-				} else {
-					// node deleted
-					this.endGame(false, false);
 				}
 			});
 	};
@@ -320,7 +377,7 @@ class Game extends Component {
 	 * @param isDisconnected
 	 */
 	logGameResult = (isDisconnected = false) => {
-		const { gameRef, gameRefKey, gameLogsRef, history, firstPlayer } = this.state;
+		const { gameRef, gameRefKey, gameLogsRef, gamePresenceRef, history, firstPlayer } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].value === 1;
 
@@ -356,38 +413,11 @@ class Game extends Component {
 					.child(gameRefKey)
 					.remove()
 					.then(() => {
-						gameRef.child(gameState.type).off();
-						gameLogsRef.off();
+						gameRef.child(gameState.type).off(); // player
+						gameLogsRef.off(); // logs
+						gamePresenceRef.remove().then(); // presence
 					});
 			});
-	};
-
-	/**
-	 * write a string when this (current) client loses connection
-	 */
-	onUserDisconnectWithFirebase = () => {
-		const { gameInfoRef } = this.state;
-
-		// remove on init
-		gameInfoRef.remove().then();
-
-		// listener
-		gameInfoRef.on('child_added', () => {
-			// end game
-			this.endGame(true);
-
-			// off
-			gameInfoRef.off();
-
-			// remove
-			gameInfoRef.remove().then();
-		});
-
-		// on disconnect
-		gameInfoRef
-			.onDisconnect()
-			.update({ value: 'Connected' })
-			.then();
 	};
 }
 
