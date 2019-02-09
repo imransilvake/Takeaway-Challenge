@@ -239,7 +239,12 @@ class Game extends Component {
 					.child(gameState.type)
 					.child(gameRefKey)
 					.update({ history: updateHistory })
-					.then();
+					.then(() => {
+						if (gameState.type === 'cpu') {
+							// validate game state
+							this.validateGameState(value);
+						}
+					});
 			}
 		});
 	};
@@ -262,7 +267,7 @@ class Game extends Component {
 					// turn: cpu
 					if (gameState.type === 'cpu') {
 						if (data.history && !isEven(data.history.length) && lastHistoryItem.value > 1) {
-							// evaluate to true if the variable is divisible by 3
+							// add next move
 							this.addNextMove(this.validateNumberForNextMove(lastHistoryItem.value));
 						}
 					} else {
@@ -281,7 +286,7 @@ class Game extends Component {
 	};
 
 	/**
-	 * evaluate to true if the variable is divisible by 3
+	 * evaluate number for next move
 	 *
 	 * @param num
 	 * @returns {string}
@@ -405,19 +410,21 @@ class Game extends Component {
 
 		// empty data from firebase database
 		// remove live listeners
-		gameLogsRef
-			.push(logPayload)
-			.then(() => {
-				gameRef
-					.child(gameState.type)
-					.child(gameRefKey)
-					.remove()
-					.then(() => {
-						gameRef.child(gameState.type).off(); // player
-						gameLogsRef.off(); // logs
-						gamePresenceRef.remove().then(); // presence
-					});
-			});
+		if (gameState.type === 'cpu' || !firstPlayer || isDisconnected) {
+			gameLogsRef
+				.push(logPayload)
+				.then(() => {
+					gameRef
+						.child(gameState.type)
+						.child(gameRefKey)
+						.remove()
+						.then(() => {
+							gameRef.child(gameState.type).off(); // player
+							gameLogsRef.off(); // logs
+							gamePresenceRef.remove().then(); // presence
+						});
+				});
+		}
 	};
 }
 
