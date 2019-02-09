@@ -8,18 +8,22 @@ Takeaway Challenge is an application based using React-Seed that is itself based
 
 ## Content
 #### Game Specific
-- [X] Play against CPU
-- [ ] Play against another Player
-- [X] Management of Logs of the application
+- [X] Player vs CPU
+	- Play multiple games at the same time
+- [X] Player vs Player
+	- Two players can play at a time
+	- Other Players will have to wait until game finishes or interrupted
+	- Handle logs in case if user has refreshed/closed the page/browser
+- [X] Maintain history of Logs of the application
 - [X] Language Support (EN/DE)
-- [X] Clean and Responsive Layout
+- [X] Provide Clean and Responsive Layout
 
 #### Code Specific
 - [X] Firebase Real-time Database
 - [X] Redux
 - [X] Inclusion of SCSS
-- [X] Support JSX and StyleLint 
-- [X] Internationalization (i18n)
+- [X] Support JSX and SCSS Lint 
+- [X] Support Internationalization (i18n)
 
 
 ## Libraries and Frameworks
