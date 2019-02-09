@@ -6,7 +6,7 @@ import i18n from '../../../../assets/i18n/i18n';
 
 class GameAlert extends Component {
 	state = {
-		timer: 100
+		timer: 15
 	};
 
 	componentWillUnmount() {
@@ -16,7 +16,7 @@ class GameAlert extends Component {
 
 	render() {
 		const { timer } = this.state;
-		const { gameState, firstPlayer, secondPlayer, even, odd } = this.props;
+		const { gameState, firstPlayer, secondPlayer, even, odd, waitingForUser } = this.props;
 
 		// set turn (based on game type)
 		// set player names
@@ -29,7 +29,9 @@ class GameAlert extends Component {
 
 		return (
 			<section className="tc-game-alert cd-center-align">
-				<p>{i18n.t('GAME.ALERT', { name: !turn ? 'Your' : opponentName, time: timer })}</p>
+				{waitingForUser && firstPlayer && (<p>Please Hold on until another player starts!</p>)}
+				{waitingForUser && secondPlayer && (<p>Please make a move ;)</p>)}
+				{!waitingForUser && (<p>{i18n.t('GAME.ALERT', { name: !turn ? 'Your' : opponentName, time: timer })}</p>)}
 			</section>
 		)
 	}
@@ -39,7 +41,7 @@ class GameAlert extends Component {
 	 */
 	startTimer = () => {
 		const startTime = Date.now();
-		const counter = 100;
+		const counter = 15;
 		this.timer = setInterval(() => {
 			const seconds = Math.round((Date.now() - startTime) / 1000);
 

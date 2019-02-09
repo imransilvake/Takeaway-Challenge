@@ -17,6 +17,9 @@
 				"SUBTITLE": "Better Luck Next Time!"
 			}
 		},
+		"STATUS": {
+			"BUSY": "Room is full. Please try after some time!"
+		},
 		"ADDITION": {
 			"TITLE": "Goto Home",
 			"NOTE": "Tip: Get 1 at the end to win the game."

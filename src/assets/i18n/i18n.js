@@ -3,12 +3,12 @@ import i18n from 'i18next';
 
 // i18n
 import detector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
 
 // app
 import translationEN from './locales/en';
 import translationDE from './locales/de';
 import { localStorageGet } from '../../app/system/utilities/helpers/Storage';
-import { initReactI18next } from 'react-i18next';
 
 // add translations
 const resources = {

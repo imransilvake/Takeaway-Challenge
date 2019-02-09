@@ -17,6 +17,9 @@
 				"SUBTITLE": "Besseres Glück beim nächsten Mal!"
 			}
 		},
+		"STATUS": {
+			"BUSY": "Raum ist voll. Bitte nach einiger Zeit versuchen!"
+		},
 		"ADDITION": {
 			"TITLE": "Zur Startseite",
 			"NOTE": "Spitze: Holen Sie sich 1 am Ende, um das Spiel zu gewinnen."

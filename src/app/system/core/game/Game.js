@@ -10,8 +10,9 @@ import ENV from '../../../../environment';
 import GameAlert from './GameAlert';
 import GameMoves from './GameMoves';
 import GameButtons from './GameButtons';
-import { exitGame } from '../../../store/actions/GameAction';
 import isEven from '../../utilities/helpers/Helpers';
+import LoadingAnimation from '../../utilities/loading-animation/LoadingAnimation';
+import { exitGame } from '../../../store/actions/GameAction';
 
 class Game extends Component {
 	state = {
@@ -22,7 +23,9 @@ class Game extends Component {
 		gameRefKey: null,
 		history: [],
 		firstPlayer: true,
-		secondPlayer: false
+		secondPlayer: false,
+		gameView: false,
+		waitingForUser: false
 	};
 
 	constructor(props) {
@@ -46,33 +49,29 @@ class Game extends Component {
 	}
 
 	render() {
-		const { history, firstPlayer, secondPlayer } = this.state;
+		const { history, firstPlayer, secondPlayer, gameView, waitingForUser } = this.state;
 		const { gameState } = this.props;
 		const even = history && isEven(history.length);
 		const odd = history && !isEven(history.length);
 
-		return (
+		return !gameView? <LoadingAnimation /> : (
 			<section className="tc-game tc-view-height">
-				{/* Alert */}
 				<GameAlert
 					gameState={gameState}
 					history={history}
+					waitingForUser={waitingForUser}
 					firstPlayer={firstPlayer}
 					secondPlayer={secondPlayer}
 					even={even}
 					odd={odd}
 					endGame={this.endGame}
-					ref={this.timerRef}
-				/>
+					ref={this.timerRef}/>
 
-				{/* Moves */}
 				<GameMoves
 					gameState={gameState}
 					history={history}
-					scrollRef={this.scrollRef}
-				/>
+					scrollRef={this.scrollRef}/>
 
-				{/* Buttons */}
 				<GameButtons
 					gameState={gameState}
 					history={history}
@@ -80,8 +79,7 @@ class Game extends Component {
 					secondPlayer={secondPlayer}
 					even={even}
 					odd={odd}
-					addNextMove={this.addNextMove}
-				/>
+					addNextMove={this.addNextMove}/>
 			</section>
 		);
 	}
@@ -116,6 +114,9 @@ class Game extends Component {
 
 				// for two players
 				if (totalUsers < 3) {
+					// display game view
+					this.setState({ gameView: true });
+
 					// on player disconnect
 					this.onPlayerDisconnect();
 				}
@@ -141,9 +142,6 @@ class Game extends Component {
 									firstPlayer: false,
 									secondPlayer: true
 								}, () => {
-									// restart timer
-									this.timerRef.current.restartTimer();
-
 									// add firebase real-time listener
 									this.addFirebaseRealTimeListener();
 								});
@@ -156,7 +154,8 @@ class Game extends Component {
 
 					// go to home
 					this.props.history.push({
-						pathname: ENV.ROUTING.HOME
+						pathname: ENV.ROUTING.HOME,
+						info: { busy: true }
 					});
 				}
 			})
@@ -281,9 +280,18 @@ class Game extends Component {
 						});
 					}
 
-					// restart timer
+					// after second user made a move
 					if (data && data.history.length > 1) {
+						// restart timer
 						this.timerRef.current.restartTimer();
+
+						// disable wait
+						this.setState({ waitingForUser: false });
+					} else {
+						// set wait
+						if (!this.state.waitingForUser) {
+							this.setState({ waitingForUser: true });
+						}
 					}
 				}
 			});

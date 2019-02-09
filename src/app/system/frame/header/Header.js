@@ -1,12 +1,14 @@
 // react
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import Link from 'react-router-dom/es/Link';
 
 // app
 import Logo from '../../../../assets/images/logo.png';
 import i18n from '../../../../assets/i18n/i18n';
-import { localStorageGet, localStoragePut } from '../../utilities/helpers/Storage';
-import Link from 'react-router-dom/es/Link';
 import ENV from '../../../../environment/index';
+import classNames from 'classnames/bind';
+import { localStorageGet, localStoragePut } from '../../utilities/helpers/Storage';
 
 class Header extends Component {
 	state = {
@@ -23,11 +25,16 @@ class Header extends Component {
 	}
 
 	render() {
+		const { location } = this.props;
+		const logoClass = classNames({
+			'ts-disabled': location.pathname === ENV.ROUTING.GAME
+		});
+
 		return (
 			<section className="tc-header">
 				<div className="cd-row">
 					<div className="cd-col cd-col-pd-d-8 cd-col-pd-w-8 tc-logo">
-						<Link to={ENV.ROUTING.HOME} className="ts-disabled">
+						<Link to={ENV.ROUTING.HOME} className={logoClass}>
 							<img src={Logo} alt="logo"/>
 						</Link>
 					</div>
@@ -70,4 +77,4 @@ class Header extends Component {
 	}
 }
 
-export default Header;
+export default withRouter(Header);
