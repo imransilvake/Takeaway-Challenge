@@ -122,6 +122,10 @@ class Game extends Component {
 
 				// validate game
 				if (totalUsers === 1) {
+					// clear old data (if any)
+					gameRef.remove().then();
+
+					// init game
 					this.initGame();
 				} else if (totalUsers === 2) {
 					gameRef
