@@ -33,20 +33,6 @@ class Game extends Component {
 	}
 
 	componentDidMount() {
-		const { gameState } = this.props;
-
-		// detect online status
-		if (!navigator.onLine) {
-			this.props.history.push({
-				pathname: ENV.ROUTING.HOME
-			});
-		}
-
-		// on user disconnect with firebase
-		if (gameState.type !== 'cpu') {
-			this.onUserDisconnectWithFirebase();
-		}
-
 		// validate players
 		this.validatePlayers();
 	}
@@ -116,9 +102,14 @@ class Game extends Component {
 							firstPlayer: false,
 							secondPlayer: true
 						}, () => {
+							// restart timer
 							this.timerRef.current.restartTimer();
+
+							// on user disconnect with firebase
+							this.onUserDisconnectWithFirebase();
 						});
 					} else {
+						// init game
 						this.initGame();
 					}
 				})
@@ -222,7 +213,12 @@ class Game extends Component {
 					}
 
 					// restart timer
-					this.timerRef.current.restartTimer();
+					if (data && data.history.length > 1) {
+						this.timerRef.current.restartTimer();
+					}
+				} else {
+					// node deleted
+					this.endGame(false, false);
 				}
 			});
 	};
@@ -282,12 +278,15 @@ class Game extends Component {
 	 * end game
 	 *
 	 * @param isDisconnected
+	 * @param isLogResult
 	 */
-	endGame = (isDisconnected = false) => {
+	endGame = (isDisconnected = false, isLogResult = true) => {
 		const { history, firstPlayer, secondPlayer } = this.state;
 
 		// log result
-		this.logGameResult(isDisconnected);
+		if (isLogResult) {
+			this.logGameResult(isDisconnected);
+		}
 
 		// validate result
 		let result = false;
@@ -387,7 +386,7 @@ class Game extends Component {
 		// on disconnect
 		gameInfoRef
 			.onDisconnect()
-			.update({value: 'Connected'})
+			.update({ value: 'Connected' })
 			.then();
 	};
 }

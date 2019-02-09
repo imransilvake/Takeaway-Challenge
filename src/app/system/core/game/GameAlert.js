@@ -6,7 +6,7 @@ import i18n from '../../../../assets/i18n/i18n';
 
 class GameAlert extends Component {
 	state = {
-		timer: 100
+		timer: 10
 	};
 
 	componentWillUnmount() {
@@ -39,7 +39,7 @@ class GameAlert extends Component {
 	 */
 	startTimer = () => {
 		const startTime = Date.now();
-		const counter = 100;
+		const counter = 10;
 		this.timer = setInterval(() => {
 			const seconds = Math.round((Date.now() - startTime) / 1000);
 
@@ -47,7 +47,7 @@ class GameAlert extends Component {
 			this.setState({ timer: counter - seconds });
 
 			// validate user status
-			if (seconds === counter) {
+			if (Number(seconds) >= Number(counter)) {
 				// clear timer
 				this.clearTimer(this.timer);
 
