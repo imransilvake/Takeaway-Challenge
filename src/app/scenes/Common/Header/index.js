@@ -1,7 +1,7 @@
 // react
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import Link from 'react-router-dom/es/Link';
+import { Link } from 'react-router-dom';
 
 // app
 import Logo from '../../../../assets/images/logo.png';

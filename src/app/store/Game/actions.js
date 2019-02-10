@@ -51,16 +51,12 @@ const removeGameData = (data) => {
 	return (dispatch, getState, { getFirebase }) => {
 		const firebase = getFirebase();
 		const gameRef = firebase.database().ref('game');
-		const gamePresenceRef = firebase.database().ref('presence');
 
 		if (data.key) {
 			gameRef.child(data.type).child(data.key).remove().then();
 		} else {
 			gameRef.child(data.type).remove().then();
 		}
-
-		// remove presence data
-		gamePresenceRef.remove().then();
 
 		dispatch({
 			type: actionTypes.REMOVE_GAME_DATA

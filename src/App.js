@@ -1,6 +1,6 @@
 // react
 import React, { Component } from 'react';
-import BrowserRouter from 'react-router-dom/es/BrowserRouter';
+import { BrowserRouter as Router } from 'react-router-dom'
 import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -27,17 +27,15 @@ class App extends Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<BrowserRouter>
-					<React.Fragment>
-						<section className="tc-app">
-							<Header/>
+				<Router>
+					<section className="tc-app">
+						<Header/>
 
-							<AppRouter/>
+						<AppRouter/>
 
-							<Footer/>
-						</section>
-					</React.Fragment>
-				</BrowserRouter>
+						<Footer/>
+					</section>
+				</Router>
 			</Provider>
 		);
 	}

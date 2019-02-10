@@ -23,7 +23,7 @@ class Alert extends Component {
 		// set player names
 		let turn = odd;
 		let opponentName = 'CPU';
-		if (gameState.type !== 'cpu') {
+		if (gameState && gameState.type !== 'cpu') {
 			turn = (!odd && !firstPlayer) || (!even && !secondPlayer);
 			opponentName = 'Player';
 		}
@@ -33,7 +33,7 @@ class Alert extends Component {
 				{waitingForUser && firstPlayer && (<p>{i18n.t('GAME.ALERT.WAIT_FOR_MOVE')}</p>)}
 				{waitingForUser && secondPlayer && (<p>{i18n.t('GAME.ALERT.MAKE_MOVE')}</p>)}
 				{(
-					(!waitingForUser && history && history.length > 1) || gameState.type === 'cpu') && (
+					(!waitingForUser && history && history.length > 1) || (gameState && gameState.type === 'cpu')) && (
 					<p>{i18n.t('GAME.ALERT.TIMER_MESSAGE', { name: !turn ? 'Your' : opponentName, time: timer })}</p>
 				)}
 			</Notification>

@@ -23,32 +23,17 @@ class Game extends Component {
 		history: [],
 		firstPlayer: true,
 		secondPlayer: false,
-		gameView: false,
+		loading: true,
 		waitingForUser: false
 	};
 
-	constructor(props) {
-		super(props);
+	componentDidMount() {
+		// detect players (active or inactive)
+		this.detectPlayers();
 
 		// create element ref
 		this.scrollRef = React.createRef();
 		this.timerRef = React.createRef();
-	}
-
-	componentDidMount() {
-		const { gameState } = this.props;
-
-		// cpu
-		if (gameState.type === 'cpu') {
-			// display game view
-			this.setState({ gameView: true });
-
-			// init game
-			this.initGame();
-		} else {
-			// detect active game players
-			this.detectActivePlayers();
-		}
 	}
 
 	componentWillReceiveProps(nextProps, nextContext) {
@@ -73,12 +58,12 @@ class Game extends Component {
 	}
 
 	render() {
-		const { history, firstPlayer, secondPlayer, gameView, waitingForUser } = this.state;
+		const { history, firstPlayer, secondPlayer, loading, waitingForUser } = this.state;
 		const { gameState } = this.props;
 		const even = history && isEven(history.length);
 		const odd = history && !isEven(history.length);
 
-		return !gameView ? <Loading /> : (
+		return loading ? <Loading /> : (
 			<section className="tc-game tc-view-height">
 				<Alert
 					gameState={gameState}
@@ -109,9 +94,46 @@ class Game extends Component {
 	}
 
 	/**
-	 * detect active game players
+	 * detect players (active or inactive)
 	 */
-	detectActivePlayers = () => {
+	detectPlayers = () => {
+		const { gamePresenceRef } = this.state;
+		const { gameState } = this.props;
+
+		// cpu
+		if (gameState.type === 'cpu') {
+			// display game view
+			this.setState({ loading: false });
+
+			// init game
+			this.initGame();
+		}
+
+		// player
+		if (gameState.type === 'player') {
+			gamePresenceRef
+				.once('value', (snap) => {
+					if (!snap.exists() || snap.numChildren() < 2) {
+						// detect active game players
+						this.handleActivePlayers();
+					} else {
+						// go to home
+						this.props.history.push({
+							pathname: ENV.ROUTING.HOME,
+							info: { busy: true }
+						});
+
+						// exit game
+						this.props.exitGame();
+					}
+				}).then()
+		}
+	};
+
+	/**
+	 * handle active game players
+	 */
+	handleActivePlayers = () => {
 		const { gameRef, gameInfoRef, gamePresenceRef } = this.state;
 		const { gameState } = this.props;
 		const currentUserRef = gamePresenceRef.push();
@@ -137,9 +159,9 @@ class Game extends Component {
 				const totalUsers = snap.numChildren();
 
 				// for two players
-				if (totalUsers < 3) {
+				if (totalUsers <= 2) {
 					// display game view
-					this.setState({ gameView: true });
+					this.setState({ loading: false });
 
 					// on player disconnect
 					this.onPlayerDisconnect();
@@ -153,7 +175,7 @@ class Game extends Component {
 
 					// init game
 					this.initGame();
-				} else if (totalUsers === 2) {
+				} else {
 					gameRef
 						.child(gameState.type)
 						.once('value', (snaps) => {
@@ -173,18 +195,6 @@ class Game extends Component {
 							}
 						})
 						.then();
-				} else {
-					// set user
-					currentUserRef.set(false).then();
-
-					// go to home
-					this.props.history.push({
-						pathname: ENV.ROUTING.HOME,
-						info: { busy: true }
-					});
-
-					// exit game
-					this.props.exitGame();
 				}
 			})
 			.then();
@@ -405,7 +415,7 @@ class Game extends Component {
 	 * @param isDisconnected
 	 */
 	logFinalResult = (isDisconnected = false) => {
-		const { gameRef, gameRefKey, history, firstPlayer } = this.state;
+		const { gameRef, gameRefKey, gamePresenceRef, history, firstPlayer } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].value === 1;
 
@@ -442,6 +452,12 @@ class Game extends Component {
 				key: gameRefKey
 			};
 			this.props.removeGameData(prepareData);
+
+			// clear presence for player vs player
+			if (gameState.type === 'player') {
+				// remove presence data
+				gamePresenceRef.remove().then();
+			}
 
 			// clear listeners
 			gameRef.child(gameState.type).off();
