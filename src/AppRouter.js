@@ -2,14 +2,16 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
+import Redirect from 'react-router-dom/es/Redirect';
+
+// i18n
+import { withTranslation } from 'react-i18next';
 
 // app
 import ENV from './environment';
 import Home from './app/scenes/Home';
 import Game from './app/scenes/Game';
 import Logs from './app/scenes/Logs';
-import Redirect from 'react-router-dom/es/Redirect';
-import { withTranslation } from 'react-i18next';
 
 class AppRouter extends Component {
 	render() {

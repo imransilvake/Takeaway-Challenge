@@ -1,8 +1,6 @@
 // react
 import React, { Component } from 'react';
 import BrowserRouter from 'react-router-dom/es/BrowserRouter';
-
-// redux
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
