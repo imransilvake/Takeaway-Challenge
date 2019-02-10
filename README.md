@@ -1,5 +1,5 @@
 # Takeaway Challenge
-Takeaway Challenge is an application based using React-Seed that is itself based on create-react-app and it incorporates many best practices typically needed in Enterprise apps. [Play Now](https://takeaway-challenge.firebaseapp.com/)
+Takeaway Challenge is a single and multiplayer game challenge given by Lieferando using React, Redux, Firebase, and custom SCSS Framework. [Play Now](https://takeaway-challenge.firebaseapp.com/)
 
 <p align="center">
 <img src="preview.png" width="60%">
@@ -21,9 +21,10 @@ Takeaway Challenge is an application based using React-Seed that is itself based
 #### Code Specific
 - [X] Firebase Real-time Database
 - [X] Redux
-- [X] Inclusion of SCSS
+- [X] SCSS
 - [X] Support JSX and SCSS Lint 
 - [X] Support Internationalization (i18n)
+- [ ] Test Cases 
 
 
 ## Libraries and Frameworks

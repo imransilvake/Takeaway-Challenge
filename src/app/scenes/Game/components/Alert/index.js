@@ -7,7 +7,7 @@ import Notification from '../../../../components/Notification';
 
 class Alert extends Component {
 	state = {
-		timer: 1500
+		timer: 30
 	};
 
 	componentWillUnmount() {
@@ -45,7 +45,7 @@ class Alert extends Component {
 	 */
 	startTimer = () => {
 		const startTime = Date.now();
-		const counter = 1500;
+		const counter = 30;
 		this.timer = setInterval(() => {
 			const seconds = Math.round((Date.now() - startTime) / 1000);
 
@@ -58,7 +58,7 @@ class Alert extends Component {
 				this.clearTimer(this.timer);
 
 				// end game
-				this.props.endGame();
+				this.props.endGame(false, true, true);
 			}
 		}, 1000);
 	};

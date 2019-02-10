@@ -24,7 +24,8 @@ class Game extends Component {
 		firstPlayer: true,
 		secondPlayer: false,
 		loading: true,
-		waitingForUser: false
+		waitingForUser: false,
+		timerEnd: false
 	};
 
 	componentDidMount() {
@@ -209,11 +210,11 @@ class Game extends Component {
 		// when user disconnected (on)
 		gamePresenceRef
 			.once('child_removed', () => {
-				const { history } = this.state;
+				const { history, timerEnd } = this.state;
 				const lastHistoryItem = history[history.length - 1];
 
 				// check if game is finished or interrupted
-				if (lastHistoryItem && lastHistoryItem.value !== 1) {
+				if (lastHistoryItem && lastHistoryItem.value !== 1 && !timerEnd) {
 					// remove
 					gamePresenceRef.remove().then();
 
@@ -374,9 +375,15 @@ class Game extends Component {
 	 *
 	 * @param isDisconnected
 	 * @param isLogResult
+	 * @param isTerminated
 	 */
-	endGame = (isDisconnected = false, isLogResult = true) => {
+	endGame = (isDisconnected = false, isLogResult = true, isTerminated = false) => {
 		const { history, firstPlayer, secondPlayer } = this.state;
+
+		// set terminate
+		if (isTerminated) {
+			this.setState({ timerEnd: isTerminated });
+		}
 
 		// log result
 		if (isLogResult) {
