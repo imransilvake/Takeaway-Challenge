@@ -2,14 +2,14 @@
 import React from 'react';
 
 // app
-import Button from '@material-ui/core/Button';
+import MaterialButton from '@material-ui/core/Button';
 
-const ButtonCustom = ({ children, ...rest }) => (
+const Button = ({ children, ...rest }) => (
 	<span className="tc-custom-button">
-		<Button {...rest}>
+		<MaterialButton {...rest}>
 			{children}
-		</Button>
+		</MaterialButton>
 	</span>
 );
 
-export default ButtonCustom;
+export default Button;

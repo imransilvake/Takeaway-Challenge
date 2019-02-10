@@ -2,7 +2,7 @@
 import React from 'react';
 
 // app
-import ButtonCustom from '../../../../components/Button';
+import Button from '../../../../components/Button';
 
 const Actions = (props) => {
 	const { gameState, history, firstPlayer, secondPlayer, even, odd } = props;
@@ -18,21 +18,21 @@ const Actions = (props) => {
 
 	return (
 		<section className="tc-game-buttons">
-			<ButtonCustom
+			<Button
 				className="tc-button-style-one"
 				disabled={turn || allowedNumber !== '-1' || isEnd}
 				onClick={() => props.addNextMove('-1')}>-1
-			</ButtonCustom>
-			<ButtonCustom
+			</Button>
+			<Button
 				className="tc-button-style-one"
 				disabled={turn || allowedNumber !== '0' || isEnd}
 				onClick={() => props.addNextMove('0')}>0
-			</ButtonCustom>
-			<ButtonCustom
+			</Button>
+			<Button
 				className="tc-button-style-one"
 				disabled={turn || allowedNumber !== '+1' || isEnd}
 				onClick={() => props.addNextMove('+1')}>+1
-			</ButtonCustom>
+			</Button>
 		</section>
 	);
 };

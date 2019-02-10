@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 // app
 import i18n from '../../../assets/i18n/i18n';
 import ENV from '../../../environment';
-import ButtonCustom from '../../components/Button';
+import Button from '../../components/Button';
 import { startGame } from '../../store/Game/actions';
 
 class Home extends Component {
@@ -31,27 +31,27 @@ class Home extends Component {
 					}
 					<div className="tc-buttons">
 						<Link to={ENV.ROUTING.GAME}>
-							<ButtonCustom
+							<Button
 								className="tc-button-style-two"
 								onClick={this.startGame('cpu')}>
 								{i18n.t('HOME.BUTTONS.CPU')}
-							</ButtonCustom>
+							</Button>
 						</Link>
 						<Link to={ENV.ROUTING.GAME}>
-							<ButtonCustom
+							<Button
 								className="tc-button-style-two"
 								onClick={this.startGame('player')}>
 								{i18n.t('HOME.BUTTONS.REAL')}
-							</ButtonCustom>
+							</Button>
 						</Link>
 					</div>
 					<div className="tc-logs">
 						{
 							!location.state && (
 								<Link to={ENV.ROUTING.LOGS}>
-									<ButtonCustom className="tc-button-style-three">
+									<Button className="tc-button-style-three">
 										{i18n.t('HOME.BUTTONS.LOGS')}
-									</ButtonCustom>
+									</Button>
 								</Link>
 							)
 						}
