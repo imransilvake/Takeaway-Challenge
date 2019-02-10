@@ -1,0 +1,48 @@
+.tc-custom-button {
+	Button {
+		&.tc-button-style-one {
+			background-color: cd-palette($cd-background, 2012);
+			border-radius: 50%;
+			color: cd-palette($cd-color, 1001);
+			margin: 0 10px;
+			min-height: 40px;
+			min-width: 40px;
+			padding: 0;
+			width: 40px;
+
+			&:disabled {
+				opacity: .5;
+				pointer-events: none;
+			}
+
+			&:hover {
+				background-color: cd-palette($cd-background, 2012) !important;
+				opacity: .5;
+			}
+
+			&:not(:disabled) {
+				opacity: 1 !important;
+			}
+		}
+
+		&.tc-button-style-two {
+			background-color: cd-palette($cd-background, 2001);
+			border-radius: 3px;
+			box-shadow: 1px 1px 1px cd-palette($cd-shadow, 4005);
+			padding: 2px 8px;
+
+			&:first-child {
+				margin-right: 5px;
+			}
+		}
+
+		&.tc-button-style-three {
+			background: transparent;
+			border: 0;
+			color: cd-palette($cd-color, 1001);
+			outline: 0;
+			text-decoration: underline;
+			text-transform: capitalize;
+		}
+	}
+}

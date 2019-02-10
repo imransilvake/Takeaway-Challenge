@@ -1,0 +1,49 @@
+.tc-home {
+	background-color: cd-palette($cd-background, 2012);
+	position: relative;
+
+	h4 {
+		color: cd-palette($cd-color, 1001);
+		font-weight: cd-fontWeight(700);
+	}
+
+	p {
+		color: cd-palette($cd-color, 1001);
+	}
+
+	.tc-center {
+		width: 100%;
+
+		.ts-busy {
+			background-color: cd-palette($cd-background, 2009);
+			margin-top: 5px;
+			padding: 2px;
+		}
+
+		.tc-buttons {
+			margin-top: 20px;
+		}
+
+		.tc-logs {
+			margin-top: 10px;
+		}
+	}
+
+	.tc-additional {
+		bottom: 10px;
+		left: 0;
+		padding: 0 10px;
+		position: absolute;
+		right: 0;
+		text-align: center;
+
+		p {
+			font-style: italic;
+		}
+
+		* {
+			color: cd-palette($cd-color, 1001);
+			font-size: cd-fontSize(s12);
+		}
+	}
+}

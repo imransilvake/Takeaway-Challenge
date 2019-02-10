@@ -34,9 +34,8 @@
 	},
 	"LOGS": {
 		"EMPTY": "Leeres Protokoll",
-		"LOADING": "Wird geladen...",
 		"TITLE": "Spiele gespielt: {{ value }}",
-		"GAME": {
+		"RESULT": {
 			"ID": "Spiel: {{ value }}",
 			"MODE": "Modus:",
 			"STATUS": "Status:",

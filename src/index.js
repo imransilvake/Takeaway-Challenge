@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 // app
 import './styles.scss';
 import './assets/i18n/i18n';
-import App from './app/App';
+import App from './App';
 
 ReactDOM.render(
 	<App/>,

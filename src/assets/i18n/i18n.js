@@ -8,7 +8,7 @@ import { initReactI18next } from 'react-i18next';
 // app
 import translationEN from './locales/en';
 import translationDE from './locales/de';
-import { localStorageGet } from '../../app/system/utilities/helpers/Storage';
+import { localStorageGet } from '../../app/utilities/Storage';
 
 // add translations
 const resources = {

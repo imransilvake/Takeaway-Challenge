@@ -1,5 +1,18 @@
-// App
+// general
 @import 'app/global';
 
-// layouts - components
-@import 'layouts';
+// app
+@import '../../App';
+
+// components
+@import '../../app/components/Button/styles';
+@import '../../app/components/Notification/styles';
+@import '../../app/components/Loading/styles';
+
+// scenes
+@import '../../app/scenes/Common/Header/styles';
+@import '../../app/scenes/Common/Footer/styles';
+@import '../../app/scenes/Home/styles';
+@import '../../app/scenes/Game/components/Moves/styles';
+@import '../../app/scenes/Game/components/Actions/styles';
+@import '../../app/scenes/Logs/styles';
