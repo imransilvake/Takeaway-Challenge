@@ -4,7 +4,8 @@ import * as actionTypes from './types';
 // init game state
 const initGameState = {
 	start: false,
-	type: ''
+	type: '',
+	refKey: null
 };
 
 // reducer: Game
@@ -20,6 +21,11 @@ const gameReducer = (state = initGameState, action) => {
 			return {
 				...state,
 				start: false
+			};
+		case actionTypes.ADD_GAME_DATA:
+			return {
+				...state,
+				refKey: action.payload
 			};
 		default:
 			return state;

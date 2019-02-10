@@ -1,9 +1,14 @@
 // react
 import React, { Component } from 'react';
 import BrowserRouter from 'react-router-dom/es/BrowserRouter';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import ReduxThunk from 'redux-thunk';
+import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
+
+// firebase
+import firebase from './firebase';
 
 // app
 import AppRouter from './AppRouter';
@@ -11,8 +16,12 @@ import Header from './app/scenes/Common/Header';
 import Footer from './app/scenes/Common/Footer';
 import rootReducer from './app/store';
 
-// redux store
-const store = createStore(rootReducer, composeWithDevTools());
+// store with firebase
+const middleware = [ReduxThunk.withExtraArgument({ getFirebase })];
+const store = createStore(rootReducer, composeWithDevTools(
+	applyMiddleware(...middleware),
+	reactReduxFirebase(firebase)
+));
 
 class App extends Component {
 	render() {

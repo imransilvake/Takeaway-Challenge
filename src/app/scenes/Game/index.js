@@ -12,14 +12,13 @@ import Moves from './components/Moves';
 import Actions from './components/Actions';
 import isEven from '../../utilities/Helpers';
 import Loading from '../../components/Loading';
-import { exitGame } from '../../store/Game/actions';
+import { addGameData, updateGameData, removeGameData, exitGame, logGameResult } from '../../store/Game/actions';
 
 class Game extends Component {
 	state = {
 		gameRef: firebase.database().ref('game'),
 		gameInfoRef: firebase.database().ref('.info/connected'),
 		gamePresenceRef: firebase.database().ref('presence'),
-		gameLogsRef: firebase.database().ref('logs'),
 		gameRefKey: null,
 		history: [],
 		firstPlayer: true,
@@ -49,6 +48,27 @@ class Game extends Component {
 		} else {
 			// detect active game players
 			this.detectActivePlayers();
+		}
+	}
+
+	componentWillReceiveProps(nextProps, nextContext) {
+		const { gameRefKey } = this.state;
+		const { gameState } = this.props;
+
+		// set state
+		if (nextProps.gameState.refKey && !gameRefKey) {
+			const key = nextProps.gameState.refKey;
+			this.setState({ gameRefKey: key }, () => {
+				const prepareData = {
+					type: gameState.type,
+					key,
+					payload: { gameRefKey: key }
+				};
+				this.props.updateGameData(prepareData);
+
+				// add firebase real-time listener
+				this.addFirebaseRealTimeListener();
+			});
 		}
 	}
 
@@ -127,8 +147,9 @@ class Game extends Component {
 
 				// validate game
 				if (totalUsers === 1) {
-					// clear old data (if any)
-					gameRef.remove().then();
+					// remove game data (old)
+					const prepareData = { type: gameState.type };
+					this.props.removeGameData(prepareData);
 
 					// init game
 					this.initGame();
@@ -141,7 +162,7 @@ class Game extends Component {
 
 								// set state
 								this.setState({
-									gameRefKey: snapshots[0].history[0].gameRefKey,
+									gameRefKey: snapshots[0].gameRefKey,
 									history: snapshots[0].history,
 									firstPlayer: false,
 									secondPlayer: true
@@ -161,6 +182,9 @@ class Game extends Component {
 						pathname: ENV.ROUTING.HOME,
 						info: { busy: true }
 					});
+
+					// exit game
+					this.props.exitGame();
 				}
 			})
 			.then();
@@ -207,51 +231,36 @@ class Game extends Component {
 	 * @param value
 	 */
 	updateGame = (value) => {
-		const { gameRef, history, gameRefKey } = this.state;
+		const { history, gameRefKey } = this.state;
 		const { gameState } = this.props;
 		const allowedNumber = this.validateNumberForNextMove(value);
 		const dataPayload = {
 			value,
-			gameRefKey,
 			allowedNumber
 		};
 		const updateHistory = history.concat(dataPayload);
 
 		// set state
 		this.setState({ history: updateHistory }, () => {
-			// random turn: first push to database
+			// first push to database when game starts
 			if (!gameRefKey) {
-				// push
-				const newGameRefKey = gameRef
-					.child(gameState.type)
-					.push({ history: updateHistory })
-					.key;
-
-				// set state
-				this.setState({ gameRefKey: newGameRefKey }, () => {
-					if (newGameRefKey) {
-						dataPayload.gameRefKey = newGameRefKey;
-						gameRef
-							.child(gameState.type)
-							.child(newGameRefKey)
-							.update({ history: history.concat(updateHistory) })
-							.then();
-					}
-
-					// add firebase real-time listener
-					this.addFirebaseRealTimeListener();
-				});
+				const prepareData = {
+					type: gameState.type,
+					payload: { history: updateHistory }
+				};
+				this.props.addGameData(prepareData);
 			} else {
-				gameRef
-					.child(gameState.type)
-					.child(gameRefKey)
-					.update({ history: updateHistory })
-					.then(() => {
-						if (gameState.type === 'cpu') {
-							// validate game state
-							this.validateGameState(value);
-						}
-					});
+				const prepareData = {
+					type: gameState.type,
+					key: gameRefKey,
+					payload: { history: updateHistory }
+				};
+				this.props.updateGameData(prepareData);
+
+				// validate game state
+				if (gameState.type === 'cpu') {
+					this.validateGameState(value);
+				}
 			}
 		});
 	};
@@ -385,7 +394,7 @@ class Game extends Component {
 				state: { result }
 			});
 
-			// update game state to redux
+			// exit game
 			this.props.exitGame();
 		}, 1000);
 	};
@@ -396,7 +405,7 @@ class Game extends Component {
 	 * @param isDisconnected
 	 */
 	logFinalResult = (isDisconnected = false) => {
-		const { gameRef, gameRefKey, gameLogsRef, gamePresenceRef, history, firstPlayer } = this.state;
+		const { gameRef, gameRefKey, history, firstPlayer } = this.state;
 		const { gameState } = this.props;
 		const isFinished = history && history[history.length - 1].value === 1;
 
@@ -422,24 +431,33 @@ class Game extends Component {
 			timestamp: Date.now()
 		};
 
-		// empty data from firebase database
-		// remove live listeners
+		// output logs, remove game data, clear listeners
 		if (gameState.type === 'cpu' || !firstPlayer || isDisconnected) {
-			gameLogsRef
-				.push(logPayload)
-				.then(() => {
-					gameRef
-						.child(gameState.type)
-						.child(gameRefKey)
-						.remove()
-						.then(() => {
-							gameRef.child(gameState.type).off(); // player
-							gameLogsRef.off(); // logs
-							gamePresenceRef.remove().then(); // presence
-						});
-				});
+			// logs game result
+			this.props.logGameResult(logPayload);
+
+			// remove game data
+			const prepareData = {
+				type: gameState.type,
+				key: gameRefKey
+			};
+			this.props.removeGameData(prepareData);
+
+			// clear listeners
+			gameRef.child(gameState.type).off();
 		}
 	};
 }
 
-export default connect(null, { exitGame })(Game);
+// dispatch
+const mapDispatchToProps = (dispatch) => {
+	return ({
+		addGameData: data => dispatch(addGameData(data)),
+		updateGameData: data => dispatch(updateGameData(data)),
+		removeGameData: data => dispatch(removeGameData(data)),
+		logGameResult: data => dispatch(logGameResult(data)),
+		exitGame: () => dispatch(exitGame())
+	})
+};
+
+export default connect(null, mapDispatchToProps)(Game);

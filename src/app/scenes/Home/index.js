@@ -74,4 +74,11 @@ class Home extends Component {
 	}
 }
 
-export default connect(null, { startGame })(Home);
+// dispatch
+const mapDispatchToProps = (dispatch) => {
+	return ({
+		startGame: data => dispatch(startGame(data))
+	})
+};
+
+export default connect(null, mapDispatchToProps)(Home);
