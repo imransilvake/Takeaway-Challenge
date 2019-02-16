@@ -9,7 +9,7 @@ import CPUImage from '../../../../../assets/images/cpu.png';
 const Moves = (props) => {
 	const { history, gameState, scrollRef } = props;
 
-	// set opponent Image
+	// set opponent image
 	let opponentImage = CPUImage;
 	if (gameState.type !== 'cpu') {
 		opponentImage = Player2Image;
