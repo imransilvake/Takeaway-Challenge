@@ -34,12 +34,15 @@ Takeaway Challenge is a single and multiplayer game challenge given by Lieferand
 #### External 
 - [X] [Create React App](https://github.com/facebook/create-react-app)
 - [X] [Redux](https://redux.js.org/)
+- [X] [Redux Thunk](https://github.com/reduxjs/redux-thunk)
 - [X] [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 - [X] [Translation](https://github.com/i18next/react-i18next)
 - [X] [Firebase](https://firebase.google.com/)
 - [X] [Material-UI](https://material-ui.com/)
 - [X] [Classnames](https://github.com/JedWatson/classnames)
 - [X] [Moment](https://momentjs.com/)
+- [X] [Enzyme](https://airbnb.io/enzyme/)
+- [X] [Redux Mock Store](https://github.com/dmitry-zaets/redux-mock-store)
 
 
 ## Information
