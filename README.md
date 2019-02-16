@@ -9,8 +9,8 @@ Takeaway Challenge is a single and multiplayer game challenge given by Lieferand
 	- Handle logs in case if user has refreshed/closed the page/browser
 	- 30 sec time counter to handle user session
 - [X] Maintain history of Logs of the application
-- [X] Language Support (EN/DE)
-- [X] Provide Clean and Responsive Layout
+- [X] Multilanguage Support (EN/DE)
+- [X] Provide clean and responsive layout
 
 <p align="center">
 <img src="preview.png" width="60%">
