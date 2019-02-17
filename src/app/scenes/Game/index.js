@@ -146,7 +146,7 @@ class Game extends Component {
 					// off listener
 					gameInfoRef.off();
 
-					// if we lose network then remove this user from the list
+					// if network is lost then remove this user from the list
 					currentUserRef.onDisconnect().remove().then();
 
 					// set user
@@ -363,7 +363,7 @@ class Game extends Component {
 			block: 'center'
 		});
 
-		// if number reaches 1, we need to finish the game and declare the winner.
+		// if number reaches 1, finish the game and declare the winner.
 		if (number === 1) {
 			// end game
 			this.endGame();
