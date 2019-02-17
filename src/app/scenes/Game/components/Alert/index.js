@@ -29,7 +29,7 @@ class Alert extends Component {
 		}
 
 		return (
-			<Notification className="tc-game-alert cd-center-align">
+			<Notification className="tc-position-fixed tc-alert cd-center-align">
 				{waitingForUser && firstPlayer && (<p>{i18n.t('GAME.ALERT.WAIT_FOR_MOVE')}</p>)}
 				{waitingForUser && secondPlayer && (<p>{i18n.t('GAME.ALERT.MAKE_MOVE')}</p>)}
 				{(

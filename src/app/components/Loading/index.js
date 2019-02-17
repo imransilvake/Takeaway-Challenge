@@ -6,7 +6,7 @@ import loaderGif from '../../../assets/svg/loader.svg';
 
 const Loading = () => {
 	return (
-		<section className="tc-loading-animation tc-view-height">
+		<section className="tc-loading-animation tc-position-fixed tc-normal">
 			<img src={loaderGif} alt="loader" />
 		</section>
 	)

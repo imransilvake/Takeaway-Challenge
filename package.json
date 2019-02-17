@@ -1,6 +1,6 @@
 {
     "name": "takeaway-challenge",
-    "version": "1.0.0",
+    "version": "0.0.2",
     "private": true,
     "scripts": {
         "start": "REACT_APP_ENV=development react-scripts start",

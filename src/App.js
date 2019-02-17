@@ -28,13 +28,13 @@ class App extends Component {
 		return (
 			<Provider store={store}>
 				<Router>
-					<section className="tc-app">
+					<React.Fragment>
 						<Header/>
 
 						<AppRouter/>
 
 						<Footer/>
-					</section>
+					</React.Fragment>
 				</Router>
 			</Provider>
 		);

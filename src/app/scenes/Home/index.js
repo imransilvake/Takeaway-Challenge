@@ -14,7 +14,7 @@ class Home extends Component {
 		const { location } = this.props;
 
 		return (
-			<section className="tc-home tc-view-height">
+			<section className="tc-home tc-position-fixed tc-normal">
 				<div className="cd-vh-center cd-center-align tc-center">
 					<h4>
 						{!location.state && i18n.t('HOME.TITLE')}

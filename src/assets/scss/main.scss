@@ -1,9 +1,6 @@
 // general
 @import 'app/global';
 
-// app
-@import '../../App';
-
 // components
 @import '../../app/components/Button/styles';
 @import '../../app/components/Notification/styles';
@@ -13,7 +10,6 @@
 @import '../../app/scenes/Common/Header/styles';
 @import '../../app/scenes/Common/Footer/styles';
 @import '../../app/scenes/Home/styles';
-@import '../../app/scenes/Game/components/Alert/styles';
 @import '../../app/scenes/Game/components/Moves/styles';
 @import '../../app/scenes/Game/components/Actions/styles';
 @import '../../app/scenes/Logs/styles';

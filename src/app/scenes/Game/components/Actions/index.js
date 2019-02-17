@@ -17,7 +17,7 @@ const Actions = (props) => {
 	}
 
 	return (
-		<section className="tc-game-buttons">
+		<section className="tc-game-buttons tc-position-fixed tc-actions">
 			<Button
 				className="tc-button-style-one"
 				disabled={turn || allowedNumber !== '-1' || isEnd}

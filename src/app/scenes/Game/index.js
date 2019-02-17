@@ -65,7 +65,7 @@ class Game extends Component {
 		const odd = history && !isEven(history.length);
 
 		return loading ? <Loading /> : (
-			<section className="tc-game tc-view-height">
+			<section className="tc-game tc-position-fixed tc-normal">
 				<Alert
 					gameState={gameState}
 					history={history}

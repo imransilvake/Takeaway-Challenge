@@ -47,16 +47,16 @@ class Logs extends Component {
 		const { logs, isLoadFinished } = this.state;
 
 		return !isLoadFinished ? <Loading/> : (
-			<section className="tc-logs tc-view-height">
+			<section className="tc-logs tc-position-fixed tc-normal">
 				{
 					logs && !logs.length && (
-						<h5 className="ts-empty tc-view-height">
+						<h5 className="ts-empty">
 							{isLoadFinished && i18n.t('LOGS.EMPTY')}
 						</h5>
 					)
 				}
 				{
-					logs && logs.length && (
+					logs && logs.length > 0 && (
 						<React.Fragment>
 							<h5 className="tc-title">{i18n.t('LOGS.TITLE', { value: logs.length })}</h5>
 							<div className="tc-list">
