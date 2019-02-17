@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
 import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
+import { withTranslation } from 'react-i18next';
 
 // firebase
 import firebase from './firebase';
@@ -41,4 +42,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default withTranslation()(App);

@@ -17,7 +17,6 @@ const resources = {
 // get current language from local storage
 const currentLanguage = localStorageGet('TC_LANGUAGE', 'PERSISTENT');
 
-
 // init i18n
 i18n
 	.use(detector)

@@ -4,9 +4,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
 import Redirect from 'react-router-dom/es/Redirect';
 
-// i18n
-import { withTranslation } from 'react-i18next';
-
 // app
 import ENV from './environment';
 import Home from './app/scenes/Home';
@@ -35,4 +32,4 @@ const mapStateToProps = state => ({
 	gameState: state.game
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps)(AppRouter)))
+export default withRouter(connect(mapStateToProps)(AppRouter))
