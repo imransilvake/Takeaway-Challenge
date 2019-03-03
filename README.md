@@ -23,7 +23,6 @@ Takeaway Challenge is a single and multiplayer game challenge given by Lieferand
 - [X] SCSS Inclusion
 - [X] Support JSX and SCSS Lint 
 - [X] Support Internationalization (i18n)
-- [ ] Test Cases 
 
 
 ## Libraries and Frameworks
@@ -40,8 +39,6 @@ Takeaway Challenge is a single and multiplayer game challenge given by Lieferand
 - [X] [Material-UI](https://material-ui.com/)
 - [X] [Classnames](https://github.com/JedWatson/classnames)
 - [X] [Moment](https://momentjs.com/)
-- [X] [Enzyme](https://airbnb.io/enzyme/)
-- [X] [Redux Mock Store](https://github.com/dmitry-zaets/redux-mock-store)
 
 
 ## Information
