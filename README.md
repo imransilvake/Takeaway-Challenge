@@ -1,16 +1,16 @@
 # Takeaway Challenge
 Takeaway Challenge is a single and multiplayer game challenge given by Lieferando using React, Redux, Firebase, and custom SCSS Framework. [Play Now](https://takeaway-challenge.firebaseapp.com/)
 
-- [X] Player vs CPU
+- Player vs CPU
 	- Can play multiple times at the same time
-- [X] Player vs Player
+- Player vs Player
 	- Two players can play at a time
 	- Other Players will have to wait until game finishes or got interrupted
 	- Handle logs in case if user has refreshed/closed the page/browser
 	- 30 sec time counter to handle user session
-- [X] Maintain history of Logs of the application
-- [X] Multilanguage Support (EN/DE)
-- [X] Provide clean and responsive layout
+- Maintain history of Logs of the application
+- Multilanguage Support (EN/DE)
+- Provide clean and responsive layout
 
 <p align="center">
 <img src="preview.png" width="60%">
