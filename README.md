@@ -3,7 +3,7 @@ Takeaway Challenge is a single and multiplayer game challenge given by Lieferand
 
 - Use of Firebase Real-time Database to create a single and multi-player game
 - Use of Redux with Redux-Thunk Middleware to fetch data from the firebase api
-- Add support for Internationalization (i18n)
+- Provide clean and responsive layout
 
 <p align="center">
 <img src="preview.png" width="60%">
@@ -19,7 +19,7 @@ Takeaway Challenge is a single and multiplayer game challenge given by Lieferand
 	- Handle logs in case if user has refreshed/closed the page/browser
 	- 30 sec time counter to handle user session
 - [X] Maintain history of Logs of the application
-- [X] Provide clean and responsive layout
+- [X] Support Internationalization (i18n)
 
 
 ## Libraries and Frameworks
