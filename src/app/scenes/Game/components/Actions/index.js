@@ -20,18 +20,18 @@ const Actions = (props) => {
 		<section className="tc-game-buttons tc-position-fixed tc-actions">
 			<Button
 				className="tc-button-style-one"
-				disabled={turn || allowedNumber !== '-1' || isEnd}
-				onClick={() => props.addNextMove('-1')}>-1
+				disabled={turn || isEnd}
+				onClick={() => allowedNumber === '-1' && props.addNextMove('-1')}>-1
 			</Button>
 			<Button
 				className="tc-button-style-one"
-				disabled={turn || allowedNumber !== '0' || isEnd}
-				onClick={() => props.addNextMove('0')}>0
+				disabled={turn || isEnd}
+				onClick={() => allowedNumber === '0' && props.addNextMove('0')}>0
 			</Button>
 			<Button
 				className="tc-button-style-one"
-				disabled={turn || allowedNumber !== '+1' || isEnd}
-				onClick={() => props.addNextMove('+1')}>+1
+				disabled={turn || isEnd}
+				onClick={() => allowedNumber === '+1' && props.addNextMove('+1')}>+1
 			</Button>
 		</section>
 	);

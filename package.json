@@ -15,7 +15,7 @@
         "eject": "react-scripts eject"
     },
     "dependencies": {
-        "@imransilvake/scss-framework": "^2.0.7",
+        "@imransilvake/scss-framework": "2.0.7",
         "@material-ui/core": "latest",
         "@material-ui/icons": "^3.0.2",
         "classnames": "^2.2.6",
