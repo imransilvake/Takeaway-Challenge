@@ -1,4 +1,4 @@
-const staging = {
+const next = {
 	ROUTING: {
 		HOME: '/',
 		GAME: '/game',
@@ -6,4 +6,4 @@ const staging = {
 	}
 };
 
-export default staging;
+export default next;

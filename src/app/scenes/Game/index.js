@@ -25,7 +25,8 @@ class Game extends Component {
 		secondPlayer: false,
 		loading: true,
 		waitingForUser: false,
-		timerEnd: false
+		timerEnd: false,
+		wrongMove: false
 	};
 
 	componentDidMount() {
@@ -59,7 +60,7 @@ class Game extends Component {
 	}
 
 	render() {
-		const { history, firstPlayer, secondPlayer, loading, waitingForUser } = this.state;
+		const { history, firstPlayer, secondPlayer, loading, waitingForUser, wrongMove } = this.state;
 		const { gameState } = this.props;
 		const even = history && isEven(history.length);
 		const odd = history && !isEven(history.length);
@@ -89,7 +90,9 @@ class Game extends Component {
 					secondPlayer={secondPlayer}
 					even={even}
 					odd={odd}
-					addNextMove={this.addNextMove}/>
+					addNextMove={this.addNextMove}
+					isWrong={wrongMove}
+					wrongMove={this.wrongMove}/>
 			</section>
 		);
 	}
@@ -337,6 +340,19 @@ class Game extends Component {
 	};
 
 	/**
+	 * detect wrong move
+	 */
+	wrongMove = () => {
+		// set wrong
+		this.setState({ wrongMove: true });
+
+		// clear after 2 seconds
+		setTimeout(() => {
+			this.setState({ wrongMove: false });
+		}, 2000);
+	}
+
+	/**
 	 * add next move
 	 *
 	 * @param action
@@ -349,6 +365,9 @@ class Game extends Component {
 
 		// update game
 		this.updateGame(value);
+
+		// remove wrong
+		this.setState({ wrongMove: false });
 	};
 
 	/**
