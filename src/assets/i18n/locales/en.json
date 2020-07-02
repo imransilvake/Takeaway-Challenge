@@ -30,6 +30,9 @@
 			"WAIT_FOR_MOVE": "Please wait until another player starts!",
 			"MAKE_MOVE": "Please make a move!",
 			"TIMER_MESSAGE": "{{ name }} turn end in {{ time }} seconds."
+		},
+		"ACTION": {
+			"WRONG_SELECTION": "Wrong Selection"
 		}
 	},
 	"LOGS": {

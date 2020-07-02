@@ -30,6 +30,9 @@
 			"WAIT_FOR_MOVE": "Bitte warten Sie, bis ein anderer Spieler startet!",
 			"MAKE_MOVE": "Bitte mach einen Schritt!",
 			"TIMER_MESSAGE": "{{ name }} Zug endet in {{ time }} Sekunden."
+		},
+		"ACTION": {
+			"WRONG_SELECTION": "Falsche Auswahl"
 		}
 	},
 	"LOGS": {

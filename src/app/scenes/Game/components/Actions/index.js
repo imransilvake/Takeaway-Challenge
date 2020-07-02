@@ -3,6 +3,7 @@ import React from 'react';
 
 // app
 import Button from '../../../../components/Button';
+import i18n from "../../../../../assets/i18n/i18n";
 
 const Actions = (props) => {
 	const { gameState, history, firstPlayer, secondPlayer, even, odd, isWrong } = props;
@@ -32,7 +33,7 @@ const Actions = (props) => {
 
 	return (
 		<section className="tc-game-buttons tc-position-fixed tc-actions">
-			{ isWrong && (<p className="tc-wrong-selection">Wrong Selection</p>) }
+			{ isWrong && (<p className="tc-wrong-selection">{i18n.t('GAME.ACTION.WRONG_SELECTION')}</p>) }
 			<Button
 				className="tc-button-style-one"
 				disabled={turn || isEnd || isWrong}
