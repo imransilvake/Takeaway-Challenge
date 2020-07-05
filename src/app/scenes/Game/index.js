@@ -1,6 +1,7 @@
 // react
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 // firebase
 import firebase from '../../../firebase';
@@ -502,4 +503,4 @@ const mapDispatchToProps = (dispatch) => {
 	})
 };
 
-export default connect(null, mapDispatchToProps)(Game);
+export default withTranslation()(connect(null, mapDispatchToProps)(Game));

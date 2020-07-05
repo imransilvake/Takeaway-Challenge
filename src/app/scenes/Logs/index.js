@@ -1,5 +1,6 @@
 // react
 import React, { Component } from 'react';
+import { withTranslation } from 'react-i18next';
 
 // firebase
 import firebase from '../../../firebase';
@@ -83,4 +84,4 @@ class Logs extends Component {
 	}
 }
 
-export default Logs;
+export default withTranslation()(Logs);

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 // app
 import i18n from '../../../assets/i18n/i18n';
@@ -81,4 +82,4 @@ const mapDispatchToProps = (dispatch) => {
 	})
 };
 
-export default connect(null, mapDispatchToProps)(Home);
+export default withTranslation()(connect(null, mapDispatchToProps)(Home));
