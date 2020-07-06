@@ -1,9 +1,8 @@
+// app
+import appRoutes from './app-routes';
+
 const next = {
-	ROUTING: {
-		HOME: '/',
-		GAME: '/game',
-		LOGS: '/logs'
-	}
+	ROUTING: appRoutes
 };
 
 export default next;
