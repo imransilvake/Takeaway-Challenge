@@ -1,5 +1,5 @@
 # Takeaway Challenge
-Takeaway Challenge is a single and multiplayer game challenge given by Lieferando using React, Redux, Firebase, and custom SCSS Framework. A random number is generated in the gameplay and players have to make that number divisible by 3 with the following options: -1, 0, +1. The Player who gets 1 in the end will be the winner.
+Takeaway Challenge is a single and multiplayer game provided as a code challenge by Lieferando. A random number is generated in the gameplay and players have to make that number divisible by 3 by selecting one of the following options: -1, 0, +1. The Player who gets 1 in the end will be the winner. It is built using React, Redux, Firebase, and custom SCSS Framework.
 
 - Use of Firebase Real-time Database to create a single and multi-player game
 - Use of Redux with Redux-Thunk Middleware to fetch data from the firebase api
