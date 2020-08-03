@@ -39,5 +39,11 @@ Takeaway Challenge is a single and multiplayer game provided as a code challenge
 - [X] [Moment](https://momentjs.com/)
 
 
+## Requirements
+```
+node version 10
+```
+
+
 ## Information
 Check [React-Seed](https://github.com/imransilvake/React-Seed) to understand how to build and serve this project as well as how to use SCSS and JS linting.
